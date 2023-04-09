@@ -1,0 +1,25 @@
+@import url('./lib/github-markdown.less');
+@import url('./lib/highlight.less');
+@import url('@arco-design/web-vue/es/typography/style/index.less');
+@import url('@arco-design/web-vue/es/message/style/index.less');
+* {
+  box-sizing: border-box;
+}
+.shadow {
+  box-shadow: 0 0 40px -18px rgba(0, 0, 0, 0.45) !important;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+body {
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.header-logo {
+  @apply flex justify-center items-center text-primary w-72 no-underline;
+}
