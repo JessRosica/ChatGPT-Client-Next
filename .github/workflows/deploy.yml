@@ -10,6 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses:
+          actions/checkout@v3
+          # 设置 pnpm。指定版本8.0，不然会报错
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2.2.1
+        with:
+          version: ^8.0
 
       - name: Setup Node.js v18.x
         uses: actions/setup-node@v1
@@ -18,11 +25,11 @@ jobs:
 
       - name: Install
         # 安装依赖
-        run: npm install
+        run: pnpm install
 
       - name: Build
         run:
-          npm run build
+          pnpm build
           # 打包
 
       - name: Deploy

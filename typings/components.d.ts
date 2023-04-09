@@ -33,7 +33,6 @@ declare module '@vue/runtime-core' {
     AScrollbar: typeof import('@arco-design/web-vue')['Scrollbar']
     ASelect: typeof import('@arco-design/web-vue')['Select']
     ASlider: typeof import('@arco-design/web-vue')['Slider']
-    ASpace: typeof import('@arco-design/web-vue')['Space']
     ATextarea: typeof import('@arco-design/web-vue')['Textarea']
     ATypographyParagraph: typeof import('@arco-design/web-vue')['TypographyParagraph']
     RouterLink: typeof import('vue-router')['RouterLink']
