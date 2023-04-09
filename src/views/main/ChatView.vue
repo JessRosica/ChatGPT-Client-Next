@@ -1,22 +1,20 @@
 <script setup lang="ts">
-import { randomNumber } from '@/utils/random'
-import userAvatar from '@/assets/userAvatars/user_avatar_36.webp'
 import assistant from '@/assets/openai-white.svg'
+import userAvatar from '@/assets/userAvatars/user_avatar_36.webp'
 import MessageContent from '@/components/MessageContent.vue'
 const currentTitle = ref('Vue使用localStorage')
 
-const avatarIndex = randomNumber(1, 36)
 const avatar: Record<string, string> = {
   user: userAvatar,
   assistant: assistant
 }
 
-function copyText(text: string): Promise<void> {
-  if (!navigator.clipboard) {
-    return Promise.reject()
-  }
-  return navigator.clipboard.writeText(text)
-}
+// function copyText(text: string): Promise<void> {
+//   if (!navigator.clipboard) {
+//     return Promise.reject()
+//   }
+//   return navigator.clipboard.writeText(text)
+// }
 
 const messages = [
   {

@@ -5,3 +5,4 @@
 !.umirc.ts
  
 dist
+public/**

@@ -1,14 +1,50 @@
+<script setup lang="ts">
+import { Message } from '@arco-design/web-vue'
+
+import userAvatar from '@/assets/userAvatars/user_avatar_36.webp'
+import { useLayoutStore } from '@/store/layout'
+const route = useRoute()
+const router = useRouter()
+const { isMobileScreen } = useWindowSize()
+const visible = ref(false)
+const current = computed(() => route.name)
+
+const layoutStore = useLayoutStore()
+const handleMenuItemClick = (name: string) => {
+  try {
+    router.push({ name })
+  } catch (_) {
+    Message.error('路由未实现~')
+  }
+}
+</script>
+
 <template>
-  <a-layout class="w-screen h-screen bg-[var(--color-neutral-1)]">
-    <a-layout-header class="h-14 flex bg-white dark:bg-dark-700 pr-6">
-      <RouterLink to="/" class="header-logo">
+  <a-layout class="w-full h-full bg-[var(--color-neutral-1)]">
+    <a-layout-header
+      class="h-14 flex items-center bg-white dark:bg-dark-700 pr-6"
+      :class="{ 'pl-2': !$route.meta?.hideLogoText && isMobileScreen }"
+    >
+      <a-button
+        @click="layoutStore.toggleCollapsedAction"
+        v-if="!$route.meta?.hideLogoText && isMobileScreen"
+      >
+        <template #icon><icon-menu /></template>
+      </a-button>
+      <RouterLink
+        to="/"
+        class="header-logo"
+        :class="[
+          { 'is-mobile': isMobileScreen },
+          $route.meta?.hideLogoText ? 'justify-start pl-4' : 'justify-center'
+        ]"
+      >
         <img class="w-8 h-8" src="@/assets/openai.svg" alt="1024 智能 AI" />
         <h1 class="text-base m-0">1024 智能 AI</h1>
-        <!-- <label class="text-xs">
-            一款免费、免登录和无需魔法的ChatGPT工具
-          </label> -->
       </RouterLink>
+      <!-- 移动端不显示 -->
       <a-menu
+        v-if="!isMobileScreen"
         @menu-item-click="handleMenuItemClick"
         mode="horizontal"
         :selected-keys="[current]"
@@ -31,27 +67,16 @@
           关于我们
         </a-menu-item>
       </a-menu>
-      <a-space>
-        <a-avatar
-          :image-url="userAvatar"
-          :size="32"
-          trigger-type="mask"
-          :style="{ backgroundColor: '#14C9C9' }"
-        >
-          <template #trigger-icon>
-            <IconEdit />
-          </template>
-        </a-avatar>
-        <a-button>
-          <template #icon><icon-share-alt /></template>
-        </a-button>
-        <a-button>
-          <template #icon><icon-poweroff /></template>
-        </a-button>
-      </a-space>
+      <i class="flex-1"></i>
+      <a-avatar
+        :image-url="userAvatar"
+        :size="32"
+        :style="{ backgroundColor: '#14C9C9' }"
+      >
+      </a-avatar>
     </a-layout-header>
     <a-divider class="m-0" />
-    <a-layout class="flex-1 overflow-hidden">
+    <a-layout class="flex-1 overflow-hidden relative">
       <RouterView name="sider"></RouterView>
       <a-layout class="flex-1 overflow-hidden">
         <RouterView />
@@ -90,23 +115,6 @@
     </div>
   </a-modal>
 </template>
-
-<script setup lang="ts">
-import userAvatar from '@/assets/userAvatars/user_avatar_36.webp'
-import { Message } from '@arco-design/web-vue'
-const route = useRoute()
-const router = useRouter()
-
-const visible = ref(true)
-const current = computed(() => route.name)
-const handleMenuItemClick = (name: string) => {
-  try {
-    router.push({ name })
-  } catch (_) {
-    Message.error('路由未实现~')
-  }
-}
-</script>
 
 <style lang="less" scoped>
 :deep(.arco-tabs-nav-tab-list) {

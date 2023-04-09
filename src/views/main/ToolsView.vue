@@ -1,3 +1,5 @@
+<script setup lang="ts"></script>
+
 <template>
   <a-scrollbar
     outer-style="flex: 1; overflow: hidden;"
@@ -21,8 +23,6 @@
     </div>
   </a-scrollbar>
 </template>
-
-<script setup lang="ts"></script>
 
 <style scoped lang="less">
 .setting-card {

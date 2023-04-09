@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import MarkdownIt from 'markdown-it'
 import mdKatex from '@traptitech/markdown-it-katex'
-import mila from 'markdown-it-link-attributes'
 import hljs from 'highlight.js'
+import MarkdownIt from 'markdown-it'
+import mila from 'markdown-it-link-attributes'
+import { computed, ref } from 'vue'
 // import { useBasicLayout } from '@/hooks/useBasicLayout'
 // import { t } from '@/locales'
 
@@ -16,14 +16,6 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-
-interface Props {
-  inversion?: boolean
-  error?: boolean
-  text?: string
-  loading?: boolean
-  asRawText?: boolean
-}
 
 const textRef = ref<HTMLElement>()
 const mdi = new MarkdownIt({

@@ -8,6 +8,9 @@ const router = createRouter({
       name: 'Home',
       components: {
         default: () => import('../views/HomeView.vue')
+      },
+      meta: {
+        hideLogoText: true
       }
     },
     {

@@ -1,13 +1,12 @@
 import { fileURLToPath, URL } from 'node:url'
 
-import { defineConfig, loadEnv } from 'vite'
+import legacy from '@vitejs/plugin-legacy'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-
-import legacy from '@vitejs/plugin-legacy'
 import AutoImport from 'unplugin-auto-import/vite'
 import { ArcoResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
+import { defineConfig, loadEnv } from 'vite'
 import WindiCSS from 'vite-plugin-windicss'
 
 // https://vitejs.dev/config/
@@ -25,7 +24,7 @@ export default defineConfig(({ mode }) => {
       AutoImport({
         vueTemplate: true,
         imports: ['vue', 'vue-router'],
-        dirs: ['src/config'],
+        dirs: ['src/config', 'src/hooks'],
         dts: 'typings/auto-imports.d.ts',
         // dts: false,
         resolvers: [ArcoResolver()],

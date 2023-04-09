@@ -1,7 +1,22 @@
+<script setup lang="ts">
+import { useLayoutStore } from '@/store/layout'
+
+const layoutStore = useLayoutStore()
+const { isMobileScreen } = useWindowSize()
+</script>
+
 <template>
-  <a-layout-sider class="shadow-none w-60">
+  <a-layout-sider
+    :width="240"
+    class="chat-message_list"
+    :class="{
+      'is-mobile': isMobileScreen,
+      'is-collapsed': layoutStore.collapsed
+    }"
+    @click="isMobileScreen ? layoutStore.toggleCollapsedAction() : null"
+  >
     <div class="h-full flex flex-col items-stretch overflow-hidden">
-      <div class="h-14 flex items-center px-4">
+      <div class="h-14 flex items-center px-4 bg-white">
         <a-button long type="primary">
           <template #icon>
             <icon-plus />
@@ -20,7 +35,7 @@
         </a-menu>
       </a-scrollbar>
 
-      <div class="flex items-center justify-between p-4">
+      <div class="flex items-center justify-between p-4 bg-white">
         <a-link type="primary">
           <template #icon><icon-robot-add /></template>
           清除会话
@@ -35,6 +50,36 @@
   <a-divider class="m-0 h-full" direction="vertical" />
 </template>
 
-<script setup lang="ts"></script>
-
-<style scoped></style>
+<style scoped lang="less">
+.chat-message_list {
+  &::after {
+    content: '';
+    @apply block absolute top-0 h-full !important;
+    width: 4000px;
+    left: -4000px;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+  &.is-mobile {
+    width: 240px;
+    position: absolute;
+    left: 0;
+    z-index: 20;
+    height: 100%;
+    &::after {
+      content: '';
+      @apply block absolute top-0 left-0 h-full !important;
+      width: 4000px;
+      z-index: 1;
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+    :deep(.arco-layout-sider-children) {
+      @apply relative z-10;
+    }
+    &.is-collapsed {
+      left: -5000px;
+      outline: none;
+    }
+  }
+}
+</style>
