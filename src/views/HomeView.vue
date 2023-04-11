@@ -53,11 +53,10 @@
         </p>
       </article>
     </div>
-    <div class="flex items-center justify-center">
+    <div class="flex items-center justify-center mt-6 gap-x-6">
       <a-button
         type="primary"
         shape="round"
-        class="max-w-max mx-auto mt-6"
         @click="$router.push({ name: 'Chat' })"
       >
         开启GPT互动
@@ -65,7 +64,6 @@
       <a-button
         type="outline"
         shape="round"
-        class="max-w-max mx-auto mt-6"
         @click="$router.push({ name: 'Tools' })"
       >
         AI实用工具箱
@@ -94,10 +92,10 @@
       @apply text-sm h-6 w-6 lg:h-10 lg:w-10 lg:text-xl p-0 rounded-md;
     }
     .title {
-      @apply text-sm lg:text-base;
+      @apply text-sm lg:text-base dark:text-gray-300;
     }
     .details {
-      @apply text-xs lg:text-sm;
+      @apply text-xs lg:text-sm  dark:text-gray-500;
     }
   }
 }
