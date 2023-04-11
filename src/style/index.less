@@ -1,7 +1,6 @@
 @import url('./lib/github-markdown.less');
 @import url('./lib/highlight.less');
-@import url('@arco-design/web-vue/es/typography/style/index.less');
-@import url('@arco-design/web-vue/es/message/style/index.less');
+@import url('@arco-design/web-vue/es/index.less');
 * {
   box-sizing: border-box;
 }
@@ -25,5 +24,17 @@ body {
   @apply flex items-center text-primary w-72 no-underline;
   &.is-mobile {
     @apply w-auto mx-2;
+  }
+}
+
+.editable-title__wrapper {
+  .arco-typography-edit-content {
+    @apply relative left-0 m-0 w-80;
+  }
+  &.is-mobile {
+    @apply w-full;
+    .arco-typography-edit-content {
+      @apply w-full;
+    }
   }
 }

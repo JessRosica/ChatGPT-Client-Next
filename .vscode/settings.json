@@ -34,5 +34,12 @@
   "[xml]": {
     "editor.defaultFormatter": "redhat.vscode-xml"
   },
-  "cSpell.words": ["postinstallmac", "sider", "traptitech"]
+  "cSpell.words": [
+    "Persistedstate",
+    "pinia",
+    "postinstallmac",
+    "qrcanvas",
+    "sider",
+    "traptitech"
+  ]
 }

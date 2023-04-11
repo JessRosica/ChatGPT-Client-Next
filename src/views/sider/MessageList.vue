@@ -16,7 +16,7 @@ const { isMobileScreen } = useWindowSize()
     @click="isMobileScreen ? layoutStore.toggleCollapsedAction() : null"
   >
     <div class="h-full flex flex-col items-stretch overflow-hidden">
-      <div class="h-14 flex items-center px-4 bg-white">
+      <div class="h-14 flex items-center px-4 bg-white dark:bg-dark">
         <a-button long type="primary">
           <template #icon>
             <icon-plus />
@@ -24,6 +24,7 @@ const { isMobileScreen } = useWindowSize()
           New Chat
         </a-button>
       </div>
+      <a-divider class="m-0" />
       <a-scrollbar
         outer-style="flex: 1; overflow: hidden;"
         class="overflow-y-auto h-full px-0 grid grid-cols-1 gap-y-2"
@@ -35,7 +36,7 @@ const { isMobileScreen } = useWindowSize()
         </a-menu>
       </a-scrollbar>
 
-      <div class="flex items-center justify-between p-4 bg-white">
+      <div class="flex items-center justify-between p-4 bg-white dark:bg-dark">
         <a-link type="primary">
           <template #icon><icon-robot-add /></template>
           清除会话

@@ -24,6 +24,8 @@
     "markdown-it": "^13.0.1",
     "markdown-it-link-attributes": "^4.0.1",
     "pinia": "^2.0.34",
+    "pinia-plugin-persistedstate": "^3.1.0",
+    "qrcanvas": "^3.1.2",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6"
   },

@@ -22,7 +22,7 @@ const handleMenuItemClick = (name: string) => {
 <template>
   <a-layout class="w-full h-full bg-[var(--color-neutral-1)]">
     <a-layout-header
-      class="h-14 flex items-center bg-white dark:bg-dark-700 pr-6"
+      class="h-14 flex items-center bg-white dark:bg-dark pr-6"
       :class="{ 'pl-2': !$route.meta?.hideLogoText && isMobileScreen }"
     >
       <a-button

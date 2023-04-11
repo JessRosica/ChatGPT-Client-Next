@@ -15,7 +15,9 @@
         </a-breadcrumb-item>
         <a-breadcrumb-item>关于我们</a-breadcrumb-item>
       </a-breadcrumb>
-      <div class="text-lg text-black text-opacity-75">
+      <div
+        class="text-base leading-8 text-black dark:text-light-900 text-opacity-75"
+      >
         欢迎使用1024智能Ai！
         <br />
         <br />
@@ -35,6 +37,11 @@
             alt="QQ"
             src="/QQ.png"
           />
+          <!-- <div
+            v-qr="'QQ群'"
+            class="w-28 h-28"
+            :key="layoutStore.themeMode"
+          ></div> -->
           <span class="">QQ群</span>
         </div>
         <div class="flex flex-col items-center gap-y-2 py-2">
@@ -43,6 +50,11 @@
             alt="WeChat"
             src="/WeChat.png"
           />
+          <!-- <div
+            v-qr="'微信群'"
+            class="w-28 h-28"
+            :key="layoutStore.themeMode"
+          ></div> -->
           <span class="">微信群</span>
         </div>
       </div>

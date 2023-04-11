@@ -1,21 +1,32 @@
 <script setup lang="ts">
+import type { ScrollbarInstance } from '@arco-design/web-vue'
+
 import assistant from '@/assets/openai-white.svg'
 import userAvatar from '@/assets/userAvatars/user_avatar_36.webp'
 import MessageContent from '@/components/MessageContent.vue'
+import { ALL_MODELS } from '@/config'
 const currentTitle = ref('Vue使用localStorage')
 
+const { isMobileScreen } = useWindowSize()
 const avatar: Record<string, string> = {
   user: userAvatar,
   assistant: assistant
 }
 
+const scrollbarRef = ref<ScrollbarInstance>()
 // function copyText(text: string): Promise<void> {
 //   if (!navigator.clipboard) {
 //     return Promise.reject()
 //   }
 //   return navigator.clipboard.writeText(text)
 // }
-
+onMounted(() => {
+  nextTick(() => {
+    scrollbarRef.value?.scrollTop(
+      (scrollbarRef.value?.containerRef?.scrollHeight ?? 0) - 200
+    )
+  })
+})
 const messages = [
   {
     id: 1680976980950,
@@ -32,11 +43,15 @@ const messages = [
     streaming: false
   }
 ]
+const model = ref('gpt-3.5-turbo')
 </script>
 
 <template>
-  <a-layout-header class="h-14 px-4 flex items-center bg-white">
-    <div class="flex flex-col">
+  <a-layout-header class="h-14 px-4 flex items-center bg-white dark:bg-dark">
+    <div
+      class="flex flex-col editable-title__wrapper"
+      :class="{ 'is-mobile': isMobileScreen }"
+    >
       <a-typography-paragraph
         class="m-0"
         editable
@@ -45,12 +60,25 @@ const messages = [
         {{ currentTitle }}
       </a-typography-paragraph>
     </div>
-    <i class="flex-1"></i>
+    <i class="flex-1" v-if="!isMobileScreen"></i>
+    <a-input-group v-if="!isMobileScreen">
+      <a-select class="w-44" v-model="model" placeholder="Please select ...">
+        <a-option
+          v-for="item in ALL_MODELS"
+          :key="item.name"
+          :value="item.name"
+        >
+          {{ item.name }}
+        </a-option>
+      </a-select>
+      <a-input class="w-60" placeholder="Api key..." />
+    </a-input-group>
   </a-layout-header>
   <a-divider class="m-0" />
   <a-layout-content class="flex flex-col flex-1 overflow-hidden">
     <main class="chat-wrapper">
       <a-scrollbar
+        ref="scrollbarRef"
         outer-style="flex: 1; overflow: hidden;"
         class="overflow-y-auto h-full p-4 grid grid-cols-1 gap-y-2"
       >
@@ -68,9 +96,11 @@ const messages = [
           </a-avatar>
           <section
             :class="[
-              'flex flex-1 overflow-hidden px-4 py-3 text-sm rounded-lg',
-              { 'justify-end bg-white text-primary': item.role === 'user' },
-              { 'bg-white': item.role === 'assistant' }
+              'flex flex-1 overflow-hidden px-4 py-3 text-sm rounded-lg ',
+              {
+                'justify-end bg-primary text-primary': item.role === 'user'
+              },
+              { 'bg-white dark:bg-dark': item.role === 'assistant' }
             ]"
           >
             <MessageContent
@@ -81,13 +111,12 @@ const messages = [
         </section>
       </a-scrollbar>
       <a-divider class="m-0" />
-      <footer class="w-full flex items-end bg-white px-2 justify-end pt-3 pb-2">
+      <footer
+        class="w-full flex items-end bg-white dark:bg-dark-900 px-2 justify-end pt-3 pb-2"
+      >
         <a-textarea
-          class="bg-white border-none"
-          :auto-size="{
-            minRows: 3,
-            maxRows: 5
-          }"
+          class="bg-white dark:bg-dark-900 border-none"
+          :auto-size="{ minRows: 3, maxRows: 5 }"
           placeholder="请输入您的信息..."
         />
         <a-button type="primary">

@@ -34,8 +34,8 @@ html.dark {
     --color-fg-default: #c9d1d9;
     --color-fg-muted: #8b949e;
     --color-fg-subtle: #6e7681;
-    --color-canvas-default: #0d1117;
-    --color-canvas-subtle: #161b22;
+    --color-canvas-default: #232324;
+    --color-canvas-subtle: #17171a;
     --color-border-default: #30363d;
     --color-border-muted: #21262d;
     --color-neutral-muted: rgba(110, 118, 129, 0.4);
@@ -1105,4 +1105,14 @@ html {
 
 .markdown-body ::-webkit-calendar-picker-indicator {
   filter: invert(50%);
+}
+
+.code-block-wrapper {
+  @apply relative;
+  .code-block-header {
+    @apply text-right absolute right-2 top-2 flex gap-x-2 items-center text-gray-600;
+    .code-block-header__copy {
+      @apply font-medium cursor-pointer;
+    }
+  }
 }

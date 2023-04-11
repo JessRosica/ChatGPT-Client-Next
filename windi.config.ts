@@ -15,6 +15,8 @@ export default defineConfig({
   theme: {
     extend: {
       colors: {
+        dark: '#232324',
+        'dark-900': '#17171a',
         'arcoblue-1': '#A8E3E0',
         primary: '#10A37F',
         link: '#10A37F',
