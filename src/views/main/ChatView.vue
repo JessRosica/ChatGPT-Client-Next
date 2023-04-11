@@ -112,7 +112,7 @@ const model = ref('gpt-3.5-turbo')
       </a-scrollbar>
       <a-divider class="m-0" />
       <footer
-        class="w-full flex items-end bg-white dark:bg-dark-900 px-2 justify-end pt-3 pb-2"
+        class="w-full flex items-end bg-white dark:bg-dark-900 pl-2 pr-4 justify-end pt-3 pb-2"
       >
         <a-textarea
           class="bg-white dark:bg-dark-900 border-none"

@@ -3,6 +3,8 @@ import { Message } from '@arco-design/web-vue'
 
 import userAvatar from '@/assets/userAvatars/user_avatar_36.webp'
 import { useLayoutStore } from '@/store/layout'
+
+import SettingDrawer from './views/sider/SettingDrawer.vue'
 const route = useRoute()
 const router = useRouter()
 const { isMobileScreen } = useWindowSize()
@@ -58,22 +60,24 @@ const handleMenuItemClick = (name: string) => {
           <template #icon><icon-apps /></template>
           工具
         </a-menu-item>
-        <a-menu-item key="Settings">
+        <!-- <a-menu-item key="Settings">
           <template #icon><icon-settings /></template>
           设置
-        </a-menu-item>
+        </a-menu-item> -->
         <a-menu-item key="About">
           <template #icon><icon-info-circle /></template>
           关于我们
         </a-menu-item>
       </a-menu>
       <i class="flex-1"></i>
-      <a-avatar
-        :image-url="userAvatar"
-        :size="32"
-        :style="{ backgroundColor: '#14C9C9' }"
-      >
-      </a-avatar>
+      <SettingDrawer>
+        <a-avatar
+          :image-url="userAvatar"
+          :size="32"
+          :style="{ backgroundColor: '#14C9C9' }"
+        >
+        </a-avatar>
+      </SettingDrawer>
     </a-layout-header>
     <a-divider class="m-0" />
     <a-layout class="flex-1 overflow-hidden relative">

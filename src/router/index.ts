@@ -26,11 +26,11 @@ const router = createRouter({
       name: 'Tools',
       component: () => import('@/views/main/ToolsView.vue')
     },
-    {
-      path: '/settings',
-      name: 'Settings',
-      component: () => import('@/views/main/SettingsView.vue')
-    },
+    // {
+    //   path: '/settings',
+    //   name: 'Settings',
+    //   component: () => import('@/views/main/SettingsView.vue')
+    // },
     {
       path: '/about',
       name: 'About',

@@ -17,10 +17,7 @@ const handleChangeTheme = (v: string | number | boolean) => {
 
 enum SubmitKey {
   Enter = 'Enter',
-  CtrlEnter = 'Ctrl + Enter',
-  ShiftEnter = 'Shift + Enter',
-  AltEnter = 'Alt + Enter',
-  MetaEnter = 'Meta + Enter'
+  ShiftEnter = 'Shift + Enter'
 }
 const configState = reactive({
   theme: 'auto',
@@ -44,22 +41,17 @@ const configState = reactive({
     class="overflow-y-auto h-full p-4 grid grid-cols-1 gap-y-2"
   >
     <div class="max-w-4xl w-full mx-auto">
-      <a-breadcrumb class="my-6">
-        <a-breadcrumb-item>
-          <a-link @click="$router.back">
-            <icon-arrow-left />
-            返回
-          </a-link>
-        </a-breadcrumb-item>
-        <a-breadcrumb-item>设置中心</a-breadcrumb-item>
-      </a-breadcrumb>
       <a-form
         ref="formRef"
+        :label-col-props="{ span: 12 }"
+        label-align="left"
         :model="configState"
         class="w-full mt-0 flex flex-col gap-y-3"
       >
-        <div class="setting-card bg-white dark:bg-dark">
+        <div class="setting-card dark:bg-dark">
           <a-form-item
+            label-col-flex="1"
+            :label-attrs="{ align: 'left' }"
             class="mb-0 font-medium pl-4 dark:text-light-900 nowrap"
             field="theme"
             label="Version"
@@ -67,7 +59,7 @@ const configState = reactive({
             v{{ version }}
           </a-form-item>
         </div>
-        <div class="setting-card bg-white dark:bg-dark">
+        <div class="setting-card dark:bg-dark">
           <a-form-item class="mb-0" field="theme" label="主题">
             <div class="flex flex-wrap gap-y-2 items-center">
               <a-radio-group
@@ -104,7 +96,7 @@ const configState = reactive({
             </a-radio-group>
           </a-form-item>
         </div>
-        <div class="setting-card bg-white dark:bg-dark">
+        <div class="setting-card dark:bg-dark">
           <a-form-item class="mb-0" field="apiKey" label="Api Key">
             <a-input
               v-model="configState.apiKey"
@@ -113,7 +105,7 @@ const configState = reactive({
           </a-form-item>
         </div>
 
-        <div class="setting-card bg-white dark:bg-dark">
+        <div class="setting-card dark:bg-dark">
           <a-form-item
             field="compressMessageLengthThreshold"
             label="历史消息长度压缩阈值"
@@ -167,6 +159,7 @@ const configState = reactive({
 <style lang="less">
 .settings-wrapper {
   .setting-card {
+    background-color: rgba(247, 248, 250, 0.7);
     @apply rounded-md py-4 flex flex-col gap-y-4 px-6 dark:shadow-md;
   }
   &.is-mobile {
