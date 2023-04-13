@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import type { ThemeMode } from '@/types/theme'
 
 export const useLayoutStore = defineStore(
-  '__AI_1024_STORE_LAYOUT',
+  '__AI_1024_STORE_CONFIG',
   () => {
     const collapsed = ref(false)
     const themeMode = ref<ThemeMode>('light')

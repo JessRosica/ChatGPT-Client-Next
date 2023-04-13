@@ -24,7 +24,7 @@ export default defineConfig(({ mode }) => {
       AutoImport({
         vueTemplate: true,
         imports: ['vue', 'vue-router'],
-        dirs: ['src/config', 'src/hooks'],
+        dirs: ['src/config', 'src/hooks', 'src/utils'],
         dts: 'typings/auto-imports.d.ts',
         // dts: false,
         resolvers: [ArcoResolver()],

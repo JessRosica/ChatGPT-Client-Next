@@ -5,11 +5,13 @@ import type { ThemeMode } from '@/types/theme'
 export const useLayoutStore = defineStore(
   '__AI_1024_STORE_LAYOUT',
   () => {
+    // 联系我们弹窗
+    const isShowContact = ref(true)
     const collapsed = ref(false)
     const themeMode = ref<ThemeMode>('light')
 
-    useWindowSize(v => {
-      collapsed.value = v
+    useWindowSize(() => {
+      collapsed.value = false
     })
 
     // 切换主题模式
@@ -29,16 +31,32 @@ export const useLayoutStore = defineStore(
       }
     })
 
-    const toggleCollapsedAction = () => {
-      collapsed.value = !collapsed.value
+    const changeShowContactAction = (payload: boolean) => {
+      isShowContact.value = payload
     }
-    return { collapsed, themeMode, toggleCollapsedAction, changeModeAction }
+
+    const toggleCollapsedAction = (payload?: boolean) => {
+      collapsed.value = payload !== undefined ? payload : !collapsed.value
+    }
+
+    return {
+      collapsed,
+      isShowContact,
+      themeMode,
+      toggleCollapsedAction,
+      changeModeAction,
+      changeShowContactAction
+    }
   },
   {
     persist: [
       {
         storage: localStorage,
         paths: ['themeMode']
+      },
+      {
+        storage: sessionStorage,
+        paths: ['isShowContact']
       }
     ]
   }

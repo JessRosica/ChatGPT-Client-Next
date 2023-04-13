@@ -4,11 +4,12 @@ import { Message } from '@arco-design/web-vue'
 import userAvatar from '@/assets/userAvatars/user_avatar_36.webp'
 import { useLayoutStore } from '@/store/layout'
 
+import ContactModel from './components/ContactModel.vue'
+import MessageListDrawer from './views/sider/MessageListDrawer.vue'
 import SettingDrawer from './views/sider/SettingDrawer.vue'
 const route = useRoute()
 const router = useRouter()
 const { isMobileScreen } = useWindowSize()
-const visible = ref(false)
 const current = computed(() => route.name)
 
 const layoutStore = useLayoutStore()
@@ -33,6 +34,7 @@ const handleMenuItemClick = (name: string) => {
       >
         <template #icon><icon-menu /></template>
       </a-button>
+
       <RouterLink
         to="/"
         class="header-logo"
@@ -81,43 +83,14 @@ const handleMenuItemClick = (name: string) => {
     </a-layout-header>
     <a-divider class="m-0" />
     <a-layout class="flex-1 overflow-hidden relative">
-      <RouterView name="sider"></RouterView>
+      <RouterView v-if="!isMobileScreen" name="sider"></RouterView>
       <a-layout class="flex-1 overflow-hidden">
         <RouterView />
       </a-layout>
     </a-layout>
   </a-layout>
-  <a-modal :width="640" v-model:visible="visible" :footer="false">
-    <template #title>
-      <div class="header-logo gap-x-2">
-        <img class="w-6 h-6" src="@/assets/openai.svg" alt="1024 智能 AI" />
-        <h1 class="text-base m-0">1024 智能 AI</h1>
-      </div>
-    </template>
-    <div>一款免费、免登录和无需魔法的ChatGPT工具</div>
-    <div>
-      网址经常变更，所以使用前一定要记得先加群！！！
-      群内不定时发放免费gpt独享账号
-    </div>
-    <div class="grid grid-cols-2">
-      <div class="flex flex-col items-center gap-y-2 py-2">
-        <img
-          class="max-w-11/12 border-solid border border-gray-200 p-1"
-          alt="QQ"
-          src="/QQ.png"
-        />
-        <span class="">QQ群</span>
-      </div>
-      <div class="flex flex-col items-center gap-y-2 py-2">
-        <img
-          class="max-w-11/12 border-solid border border-gray-200 p-1"
-          alt="WeChat"
-          src="/WeChat.png"
-        />
-        <span class="">微信群</span>
-      </div>
-    </div>
-  </a-modal>
+  <MessageListDrawer v-model:visible="layoutStore.collapsed" />
+  <ContactModel />
 </template>
 
 <style lang="less" scoped>

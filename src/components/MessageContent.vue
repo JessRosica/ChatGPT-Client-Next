@@ -45,8 +45,9 @@ const wrapClass = computed(() => {
     'min-w-[20px]',
     'rounded-md',
     // isMobile.value ? 'p-2' : 'px-3 py-2',
-    props.inversion ? 'bg-[#] text-[#1e1e20]' : 'bg-[#e5e6eb]',
-    props.inversion ? 'dark:bg-[#] text-[#1e1e20]' : 'dark:bg-[#1e1e20]',
+    // text-[#1e1e20]
+    props.inversion ? 'text-[#f1f1f1]' : 'bg-[#e5e6eb]',
+    props.inversion ? 'text-[]' : 'dark:bg-[#1e1e20]',
     props.inversion ? 'message-request' : 'message-reply',
     { 'text-red-500': props.error }
   ]
@@ -69,7 +70,7 @@ onUpdated(() => {
 })
 </script>
 <template>
-  <div class="text-black" :class="wrapClass">
+  <div :class="wrapClass">
     <template v-if="loading">
       <span class="dark:text-white w-[4px] h-[20px] block animate-blink" />
     </template>

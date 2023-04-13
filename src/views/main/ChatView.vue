@@ -98,7 +98,7 @@ const model = ref('gpt-3.5-turbo')
             :class="[
               'flex flex-1 overflow-hidden px-4 py-3 text-sm rounded-lg ',
               {
-                'justify-end bg-primary text-primary': item.role === 'user'
+                'justify-end bg-primary text-white': item.role === 'user'
               },
               { 'bg-white dark:bg-dark': item.role === 'assistant' }
             ]"
@@ -111,19 +111,19 @@ const model = ref('gpt-3.5-turbo')
         </section>
       </a-scrollbar>
       <a-divider class="m-0" />
-      <footer
-        class="w-full flex items-end bg-white dark:bg-dark-900 pl-2 pr-4 justify-end pt-3 pb-2"
-      >
-        <a-textarea
-          class="bg-white dark:bg-dark-900 border-none"
-          :auto-size="{ minRows: 3, maxRows: 5 }"
-          placeholder="请输入您的信息..."
-        />
-        <a-button type="primary">
-          <template #icon><icon-send /></template>
-          发送
-        </a-button>
-      </footer>
+      <a-spin loading dot>
+        <footer class="chat-footer">
+          <a-textarea
+            class="bg-white dark:bg-dark-900 border-none"
+            :auto-size="{ minRows: 3, maxRows: 5 }"
+            placeholder="请输入您的信息..."
+          />
+          <a-button type="primary">
+            <template #icon><icon-send /></template>
+            发送
+          </a-button>
+        </footer>
+      </a-spin>
     </main>
   </a-layout-content>
 </template>
@@ -140,5 +140,8 @@ const model = ref('gpt-3.5-turbo')
       @apply flex-row-reverse  pl-10 max-w-max ml-auto;
     }
   }
+}
+.chat-footer {
+  @apply w-full flex items-end bg-white dark:bg-dark-900 pl-2 pr-4 justify-end pt-3 pb-2;
 }
 </style>
