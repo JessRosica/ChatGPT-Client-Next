@@ -13,7 +13,7 @@ import WindiCSS from 'vite-plugin-windicss'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.')
   return {
-    base: '/ChatGPT-Client-Next',
+    base: mode === 'development' ? '/' : '/ChatGPT-Client-Next',
     plugins: [
       vue(),
       vueJsx(),

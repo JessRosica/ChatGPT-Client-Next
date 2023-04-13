@@ -1,46 +1,52 @@
-# chatgpt-client-next
+# ChatGPT-Client-Next
 
-This template should help get you started developing with Vue 3 in Vite.
+ChatGPT-Client-Next 是一个基于 GPT-3/4 的聊天机器人客户端，使用 Vue 和 Arco Design 进行开发，旨在提供一个简单易用的聊天机器人客户端，帮助用户更好地使用 GPT-3/4 进行聊天。
 
-## Recommended IDE Setup
+## Online Demo
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+[https://zhuzhaofeng.site/ChatGPT-Client-Next/](https://zhuzhaofeng.site/ChatGPT-Client-Next/)
 
-## Type Support for `.vue` Imports in TS
+## 功能
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+- 与 GPT 进行聊天
+- 选择模型
+- 保存聊天记录
+- 填写自定义 key
+- 修改主题
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+## 安装
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+在使用 ChatGPT-Client-Next 之前，需要先安装以下软件：
 
-## Customize configuration
+- Node.js
+- npm
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+安装完成之后，可以使用以下命令在本地运行 ChatGPT-Client-Next：
 
-## Project Setup
+```bash
+# 克隆项目 https
+git clone https://github.com/zhuzhaofeng/ChatGPT-Client-Next.git
+# 克隆项目 ssh
+git clone git@github.com:zhuzhaofeng/ChatGPT-Client-Next.git
+# 克隆项目 Github CLI
+git clone gh repo clone zhuzhaofeng/ChatGPT-Client-Next
 
-```sh
-pnpm install
+# 进入项目目录
+cd ChatGPT-Client-Next
+
+# 安装依赖
+npm install
+
+# 运行项目
+npm start
 ```
 
-### Compile and Hot-Reload for Development
+## 使用
 
-```sh
-pnpm dev
-```
+在运行 ChatGPT-Client-Next 之后，可以在浏览器中访问 `http://localhost:3000/`，进入聊天机器人客户端。
 
-### Type-Check, Compile and Minify for Production
+聊天记录会自动保存在本地，可以在聊天记录页面查看。
 
-```sh
-pnpm build
-```
+## 贡献
 
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-pnpm lint
-```
+如果您在使用 ChatGPT-Client-Next 的过程中发现了问题，或者有任何建议或想法，欢迎在 GitHub 上提交 issue 或者 pull request。
