@@ -159,7 +159,7 @@ export const useChatStore = defineStore(
     }
     /** 初始化判断是否有聊天, 没有创建一个空的 */
     onMounted(() => {
-      sessions.value = []
+      // sessions.value = []
       if (sessions.value?.length < 1) {
         newChatAction()
       }
