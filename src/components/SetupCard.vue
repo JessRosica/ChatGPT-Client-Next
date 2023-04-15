@@ -16,7 +16,7 @@ onMounted(() => {
     v-model="card"
     @change="handleChangeMode"
     :allow-clear="false"
-    placeholder="Please input card..."
+    placeholder="请输入积分卡"
   >
   </a-input>
 </template>

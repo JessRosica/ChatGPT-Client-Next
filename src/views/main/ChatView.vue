@@ -159,7 +159,7 @@ const handleEnter = (event: KeyboardEvent) => {
           @keydown.enter.prevent="handleEnter"
           class="bg-white dark:bg-dark-900 border-none"
           :auto-size="{ minRows: 3, maxRows: 5 }"
-          placeholder="请输入您的信息..."
+          placeholder="请输入您的消息..."
         />
         <a-dropdown-button
           :disabled="chatStore.fetching"

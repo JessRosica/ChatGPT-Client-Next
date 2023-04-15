@@ -46,7 +46,7 @@ const handleChangeTheme = (v: string | number | boolean) => {
         </div>
 
         <div class="setting-card dark:bg-dark">
-          <a-form-item class="mb-0" field="card" label="会员卡">
+          <a-form-item class="mb-0" field="card" label="积分卡">
             <SetupCard />
           </a-form-item>
         </div>

@@ -30,7 +30,7 @@ export const useConfigStore = defineStore(
     // 聊天模型
     const chatModel = ref<ChatModel>('gpt-3.5-turbo')
 
-    // 会员卡
+    // 积分卡
     const card = ref<string>('')
 
     // 发送按键
@@ -43,7 +43,7 @@ export const useConfigStore = defineStore(
       collapsed.value = v
     })
 
-    // 切换会员卡
+    // 切换积分卡
     function setupCardAction(payload: string) {
       card.value = payload
     }

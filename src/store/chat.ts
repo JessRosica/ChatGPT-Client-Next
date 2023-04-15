@@ -169,7 +169,7 @@ export const useChatStore = defineStore(
           fetching.value = false
           if (statusCode === 401) {
             getMessageById(botMessage.id).content =
-              '现在是未授权状态，请输入会员卡'
+              '现在是未授权状态，请输入积分卡'
           } else {
             getMessageById(botMessage.id).content +=
               statusCode !== undefined
