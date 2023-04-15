@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
-
+declare module '@nlpjs/basic'
 declare interface ImportMetaEnv extends ViteEnv {
   __: unknown
 }

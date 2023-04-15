@@ -46,22 +46,18 @@ onMounted(() => {
     )
   })
 })
+/** 修改提交键 */
 const handleSubmitChange = (value: any) => {
   configStore.changeSubmitKeyAction(value as SubmitKey)
 }
 
-// const handleEnter = (e: MouseEvent) => {
-//   const isShift = e.shiftKey
-//   const isSubmitKey = isShift
-//     ? configStore.submitKey === SubmitKey.ShiftEnter
-//     : configStore.submitKey === SubmitKey.Enter
-
-//   if (isSubmitKey) {
-//     handleSendMessage()
-//     return
-//   }
-//   message.value += '\n'
-// }
+/**
+ * 修改当前标题
+ * @param value string 标题
+ */
+const handleEditEnd = () => {
+  chatStore.handleChangeSessionTopicAction(currentTitle.value)
+}
 
 const handleEnter = (event: KeyboardEvent) => {
   // 如果设置为 "enter 发送消息"
@@ -103,6 +99,7 @@ const handleEnter = (event: KeyboardEvent) => {
         class="m-0"
         editable
         v-model:editText="currentTitle"
+        @edit-end="handleEditEnd"
       >
         {{ currentTitle }}
       </a-typography-paragraph>

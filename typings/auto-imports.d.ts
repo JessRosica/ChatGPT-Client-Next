@@ -5,6 +5,7 @@
 export {}
 declare global {
   const ALL_MODELS: typeof import('../src/config/index')['ALL_MODELS']
+  const ALL_MODELS_MAX_TOKENS: typeof import('../src/config/index')['ALL_MODELS_MAX_TOKENS']
   const EffectScope: typeof import('vue')['EffectScope']
   const computed: typeof import('vue')['computed']
   const createApp: typeof import('vue')['createApp']
@@ -89,6 +90,9 @@ declare module 'vue' {
   interface ComponentCustomProperties {
     readonly ALL_MODELS: UnwrapRef<
       typeof import('../src/config/index')['ALL_MODELS']
+    >
+    readonly ALL_MODELS_MAX_TOKENS: UnwrapRef<
+      typeof import('../src/config/index')['ALL_MODELS_MAX_TOKENS']
     >
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>

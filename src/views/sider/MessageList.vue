@@ -74,7 +74,9 @@ const handleCommand = (command: ICommand, id?: string) => {
             v-for="chat in chatStore.sessions"
             :key="chat.id"
           >
-            {{ chat.topic || '新的聊天' }}
+            <span class="flex-1 truncate">
+              {{ chat.topic || '新的聊天' }}
+            </span>
             <a-button-group size="mini" class="actions">
               <a-button
                 @click.stop="handleCommand('del', chat.id)"
@@ -84,14 +86,13 @@ const handleCommand = (command: ICommand, id?: string) => {
                   <icon-close-circle class="m-0" />
                 </template>
               </a-button>
-              <a-button
-                @click.stop="handleCommand('editor', chat.id)"
-                class="flex items-center justify-center"
-              >
-                <template #icon>
-                  <icon-edit class="m-0" />
-                </template>
-              </a-button>
+              <ChangeSessionTopic>
+                <a-button class="flex items-center justify-center">
+                  <template #icon>
+                    <icon-edit class="m-0" />
+                  </template>
+                </a-button>
+              </ChangeSessionTopic>
             </a-button-group>
           </a-menu-item>
         </a-menu>
@@ -125,12 +126,12 @@ const handleCommand = (command: ICommand, id?: string) => {
 }
 
 .chat-item {
-  @apply relative border border-dashed border-[#f2f3f5] dark:border-[#343435];
+  @apply flex items-center relative border border-dashed border-[#f2f3f5] dark:border-[#343435];
   .actions {
-    @apply absolute top-1/2 -right-12 transform -translate-y-1/2 opacity-0 transition-all;
+    @apply w-0 overflow-hidden  transition-all;
   }
   &:hover .actions {
-    @apply right-1 opacity-100;
+    @apply w-auto opacity-100;
   }
 }
 </style>

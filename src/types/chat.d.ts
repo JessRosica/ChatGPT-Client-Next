@@ -49,12 +49,7 @@ export interface ChatItem {
 
 export interface MessageModel {
   card?: string
-  messages: [
-    {
-      role: RoleModel
-      content: string
-    }
-  ]
+  messages: Partial<MessageItem>[]
   model: ChatModel
   is_stream?: boolean
   temperature?: number

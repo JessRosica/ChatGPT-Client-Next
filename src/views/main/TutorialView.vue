@@ -23,7 +23,6 @@ mdi.use(mdKatex, {
 const content = ref('')
 const loadTutorial = async () => {
   const res = await fetch('/tutorial.md').then(res => res.text())
-  console.log(res)
   content.value = res
 }
 

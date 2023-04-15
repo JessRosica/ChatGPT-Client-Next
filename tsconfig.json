@@ -1,6 +1,12 @@
 {
   "extends": "@vue/tsconfig/tsconfig.web.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "./typings/*.d.ts"],
+  "include": [
+    "env.d.ts",
+    "src/**/*",
+    "src/**/*.vue",
+    "./typings/*.d.ts",
+    "public/lib"
+  ],
   "compilerOptions": {
     "lib": ["DOM", "es2017"],
     "baseUrl": ".",

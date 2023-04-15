@@ -53,6 +53,7 @@ declare module '@vue/runtime-core' {
     ATrigger: typeof import('@arco-design/web-vue')['Trigger']
     ATypographyParagraph: typeof import('@arco-design/web-vue')['TypographyParagraph']
     ChangeChatModel: typeof import('./../src/components/ChangeChatModel.vue')['default']
+    ChangeSessionTopic: typeof import('./../src/components/ChangeSessionTopic.vue')['default']
     ContactModel: typeof import('./../src/components/ContactModel.vue')['default']
     copy: typeof import('./../src/components/ChangeChatModel copy.vue')['default']
     MessageContent: typeof import('./../src/components/MessageContent.vue')['default']

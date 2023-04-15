@@ -1,8 +1,12 @@
 import { Modal } from '@arco-design/web-vue'
+import { decode, encode } from 'gpt-token-utils'
 import { cloneDeep } from 'lodash-es'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
+import { ALL_MODELS_MAX_TOKENS } from './../config/index'
+
+console.log({ encode, decode })
 import type { ChatItem, MessageItem, MessageModel } from '@/types/chat'
 import { createMessage } from '@/utils'
 
@@ -42,6 +46,7 @@ export const useChatStore = defineStore(
       currentChat.value = id
     }
 
+    /** 清除会话 */
     const clearSessions = () => {
       Modal.warning({
         title: '操作提示',
@@ -54,6 +59,7 @@ export const useChatStore = defineStore(
         }
       })
     }
+
     /** 选中聊天 */
     const changeCurrentChatAction = (id: string) => {
       currentChat.value = id
@@ -85,28 +91,48 @@ export const useChatStore = defineStore(
       })
     }
 
+    /** 根据id获取当前消息 */
     const getMessageById = (mId: string): MessageItem => {
       return session.value?.messages.find(({ id }) => mId === id)!
     }
 
-    // const genTitleAction = (
-    //   content: string,
-    //   onMessage: (message: string) => void
-    // ) => {
-    //   const reqData: MessageModel = {
-    //     card: configStore.card,
-    //     messages: [{ role: 'user', content }],
-    //     model: configStore.chatModel,
-    //     is_stream: true
-    //   }
-    //   requestChatTitle(reqData, onMessage)
-    // }
+    /** 修改当前会话标题 */
+    const handleChangeSessionTopicAction = (v: string) => {
+      session.value!.topic = v || session.value?.topic || ''
+    }
+
+    /** 获取需要携带的消息 */
+    const getRequiredMessages = (curr: Partial<MessageItem>) => {
+      const maxTokens = ALL_MODELS_MAX_TOKENS[configStore.chatModel] || 2049
+      const res = <MessageItem[]>[]
+      const sMs = (session.value?.messages || []).filter(item => !item.isError)
+      // 当前所有的历史消息
+      const messages = cloneDeep(sMs.concat(curr as MessageItem)).map(
+        ({ role, content }) => ({ role, content })
+      )
+      let sum = 0
+      try {
+        messages.reverse().forEach(item => {
+          const tokens = encode(item.content).length
+          if (tokens < maxTokens && sum < maxTokens) {
+            sum += tokens
+            console.log(sum)
+            res.push(item as MessageItem)
+          } else {
+            throw new Error('')
+          }
+        })
+      } catch (_) {
+        //
+      }
+      return res.reverse()
+    }
 
     /** 发送消息 */
     const sendMessageAction = (content: string) => {
       const reqData: MessageModel = {
         card: configStore.card,
-        messages: [{ role: 'user', content }],
+        messages: getRequiredMessages({ role: 'user', content }),
         model: configStore.chatModel,
         is_stream: true
       }
@@ -157,6 +183,7 @@ export const useChatStore = defineStore(
         }
       })
     }
+
     /** 初始化判断是否有聊天, 没有创建一个空的 */
     onMounted(() => {
       // sessions.value = []
@@ -173,7 +200,8 @@ export const useChatStore = defineStore(
       clearSessions,
       removeChatAction,
       sendMessageAction,
-      changeCurrentChatAction
+      changeCurrentChatAction,
+      handleChangeSessionTopicAction
     }
   },
   // 保存到本地 localStorage
