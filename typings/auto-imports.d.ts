@@ -6,7 +6,6 @@ export {}
 declare global {
   const ALL_MODELS: typeof import('../src/config/index')['ALL_MODELS']
   const EffectScope: typeof import('vue')['EffectScope']
-  const axiosChunk: typeof import('../src/utils/request')['axiosChunk']
   const computed: typeof import('vue')['computed']
   const createApp: typeof import('vue')['createApp']
   const createMessage: typeof import('../src/utils/index')['createMessage']
@@ -15,6 +14,7 @@ declare global {
   const defineComponent: typeof import('vue')['defineComponent']
   const effectScope: typeof import('vue')['effectScope']
   const genNonDuplicateID: typeof import('../src/utils/gid')['genNonDuplicateID']
+  const genTitleTemplate: typeof import('../src/config/index')['genTitleTemplate']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
   const h: typeof import('vue')['h']
@@ -47,6 +47,7 @@ declare global {
   const readonly: typeof import('vue')['readonly']
   const ref: typeof import('vue')['ref']
   const requestChatStream: typeof import('../src/utils/request')['requestChatStream']
+  const requestChatTitle: typeof import('../src/utils/request')['requestChatTitle']
   const resolveComponent: typeof import('vue')['resolveComponent']
   const shallowReactive: typeof import('vue')['shallowReactive']
   const shallowReadonly: typeof import('vue')['shallowReadonly']
@@ -90,9 +91,6 @@ declare module 'vue' {
       typeof import('../src/config/index')['ALL_MODELS']
     >
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
-    readonly axiosChunk: UnwrapRef<
-      typeof import('../src/utils/request')['axiosChunk']
-    >
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
     readonly createMessage: UnwrapRef<
@@ -106,6 +104,9 @@ declare module 'vue' {
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
     readonly genNonDuplicateID: UnwrapRef<
       typeof import('../src/utils/gid')['genNonDuplicateID']
+    >
+    readonly genTitleTemplate: UnwrapRef<
+      typeof import('../src/config/index')['genTitleTemplate']
     >
     readonly getCurrentInstance: UnwrapRef<
       typeof import('vue')['getCurrentInstance']
@@ -154,6 +155,9 @@ declare module 'vue' {
     readonly ref: UnwrapRef<typeof import('vue')['ref']>
     readonly requestChatStream: UnwrapRef<
       typeof import('../src/utils/request')['requestChatStream']
+    >
+    readonly requestChatTitle: UnwrapRef<
+      typeof import('../src/utils/request')['requestChatTitle']
     >
     readonly resolveComponent: UnwrapRef<
       typeof import('vue')['resolveComponent']

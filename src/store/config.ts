@@ -14,7 +14,7 @@ export const useConfigStore = defineStore(
     })
 
     onMounted(() => {
-      fetch('/bootstrap.json')
+      fetch(`${import.meta.env.BASE_URL}/bootstrap.json`)
         .then(res => res.json())
         .then(res => {
           bootstrap.value = res
