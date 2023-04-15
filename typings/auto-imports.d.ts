@@ -74,53 +74,29 @@ declare global {
 // for type re-export
 declare global {
   // @ts-ignore
-  export type {
-    Component,
-    ComponentPublicInstance,
-    ComputedRef,
-    InjectionKey,
-    PropType,
-    Ref,
-    VNode
-  } from 'vue'
+  export type { Component, ComponentPublicInstance, ComputedRef, InjectionKey, PropType, Ref, VNode } from 'vue'
 }
 // for vue template auto import
 import { UnwrapRef } from 'vue'
 declare module 'vue' {
   interface ComponentCustomProperties {
-    readonly ALL_MODELS: UnwrapRef<
-      typeof import('../src/config/index')['ALL_MODELS']
-    >
-    readonly ALL_MODELS_MAX_TOKENS: UnwrapRef<
-      typeof import('../src/config/index')['ALL_MODELS_MAX_TOKENS']
-    >
+    readonly ALL_MODELS: UnwrapRef<typeof import('../src/config/index')['ALL_MODELS']>
+    readonly ALL_MODELS_MAX_TOKENS: UnwrapRef<typeof import('../src/config/index')['ALL_MODELS_MAX_TOKENS']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
-    readonly createMessage: UnwrapRef<
-      typeof import('../src/utils/index')['createMessage']
-    >
+    readonly createMessage: UnwrapRef<typeof import('../src/utils/index')['createMessage']>
     readonly customRef: UnwrapRef<typeof import('vue')['customRef']>
-    readonly defineAsyncComponent: UnwrapRef<
-      typeof import('vue')['defineAsyncComponent']
-    >
+    readonly defineAsyncComponent: UnwrapRef<typeof import('vue')['defineAsyncComponent']>
     readonly defineComponent: UnwrapRef<typeof import('vue')['defineComponent']>
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
-    readonly genNonDuplicateID: UnwrapRef<
-      typeof import('../src/utils/gid')['genNonDuplicateID']
-    >
-    readonly genTitleTemplate: UnwrapRef<
-      typeof import('../src/config/index')['genTitleTemplate']
-    >
-    readonly getCurrentInstance: UnwrapRef<
-      typeof import('vue')['getCurrentInstance']
-    >
+    readonly genNonDuplicateID: UnwrapRef<typeof import('../src/utils/gid')['genNonDuplicateID']>
+    readonly genTitleTemplate: UnwrapRef<typeof import('../src/config/index')['genTitleTemplate']>
+    readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
     readonly inject: UnwrapRef<typeof import('vue')['inject']>
-    readonly isAllWhitespace: UnwrapRef<
-      typeof import('../src/utils/str')['isAllWhitespace']
-    >
+    readonly isAllWhitespace: UnwrapRef<typeof import('../src/utils/str')['isAllWhitespace']>
     readonly isProxy: UnwrapRef<typeof import('vue')['isProxy']>
     readonly isReactive: UnwrapRef<typeof import('vue')['isReactive']>
     readonly isReadonly: UnwrapRef<typeof import('vue')['isReadonly']>
@@ -129,43 +105,27 @@ declare module 'vue' {
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
     readonly onActivated: UnwrapRef<typeof import('vue')['onActivated']>
     readonly onBeforeMount: UnwrapRef<typeof import('vue')['onBeforeMount']>
-    readonly onBeforeRouteLeave: UnwrapRef<
-      typeof import('vue-router')['onBeforeRouteLeave']
-    >
-    readonly onBeforeRouteUpdate: UnwrapRef<
-      typeof import('vue-router')['onBeforeRouteUpdate']
-    >
+    readonly onBeforeRouteLeave: UnwrapRef<typeof import('vue-router')['onBeforeRouteLeave']>
+    readonly onBeforeRouteUpdate: UnwrapRef<typeof import('vue-router')['onBeforeRouteUpdate']>
     readonly onBeforeUnmount: UnwrapRef<typeof import('vue')['onBeforeUnmount']>
     readonly onBeforeUpdate: UnwrapRef<typeof import('vue')['onBeforeUpdate']>
     readonly onDeactivated: UnwrapRef<typeof import('vue')['onDeactivated']>
     readonly onErrorCaptured: UnwrapRef<typeof import('vue')['onErrorCaptured']>
     readonly onMounted: UnwrapRef<typeof import('vue')['onMounted']>
     readonly onRenderTracked: UnwrapRef<typeof import('vue')['onRenderTracked']>
-    readonly onRenderTriggered: UnwrapRef<
-      typeof import('vue')['onRenderTriggered']
-    >
+    readonly onRenderTriggered: UnwrapRef<typeof import('vue')['onRenderTriggered']>
     readonly onScopeDispose: UnwrapRef<typeof import('vue')['onScopeDispose']>
-    readonly onServerPrefetch: UnwrapRef<
-      typeof import('vue')['onServerPrefetch']
-    >
+    readonly onServerPrefetch: UnwrapRef<typeof import('vue')['onServerPrefetch']>
     readonly onUnmounted: UnwrapRef<typeof import('vue')['onUnmounted']>
     readonly onUpdated: UnwrapRef<typeof import('vue')['onUpdated']>
     readonly provide: UnwrapRef<typeof import('vue')['provide']>
-    readonly randomNumber: UnwrapRef<
-      typeof import('../src/utils/random')['randomNumber']
-    >
+    readonly randomNumber: UnwrapRef<typeof import('../src/utils/random')['randomNumber']>
     readonly reactive: UnwrapRef<typeof import('vue')['reactive']>
     readonly readonly: UnwrapRef<typeof import('vue')['readonly']>
     readonly ref: UnwrapRef<typeof import('vue')['ref']>
-    readonly requestChatStream: UnwrapRef<
-      typeof import('../src/utils/request')['requestChatStream']
-    >
-    readonly requestChatTitle: UnwrapRef<
-      typeof import('../src/utils/request')['requestChatTitle']
-    >
-    readonly resolveComponent: UnwrapRef<
-      typeof import('vue')['resolveComponent']
-    >
+    readonly requestChatStream: UnwrapRef<typeof import('../src/utils/request')['requestChatStream']>
+    readonly requestChatTitle: UnwrapRef<typeof import('../src/utils/request')['requestChatTitle']>
+    readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly shallowReactive: UnwrapRef<typeof import('vue')['shallowReactive']>
     readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>
     readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
@@ -181,9 +141,7 @@ declare module 'vue' {
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
-    readonly useWindowSize: UnwrapRef<
-      typeof import('../src/hooks/useWindowSize')['default']
-    >
+    readonly useWindowSize: UnwrapRef<typeof import('../src/hooks/useWindowSize')['default']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
     readonly watchPostEffect: UnwrapRef<typeof import('vue')['watchPostEffect']>

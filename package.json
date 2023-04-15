@@ -8,7 +8,7 @@
     "preview": "vite preview",
     "build": "vite build",
     "type-check": "vue-tsc --noEmit",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "lint": "eslint . --ext \"{src,mock}/**/*.{vue,ts,js,tsx}\" --fix --ignore-path .eslintignore",
     "format": "prettier --write src/",
     "prepare": "husky install",
     "pre-commit": "lint-staged",
