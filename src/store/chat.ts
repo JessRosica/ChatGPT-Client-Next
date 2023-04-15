@@ -14,7 +14,7 @@ export const useChatStore = defineStore(
     const configStore = useConfigStore()
     const newChat: ChatItem = {
       id: genNonDuplicateID(),
-      topic: '新的聊天',
+      topic: '',
       sendMemory: true,
       messages: [],
       lastUpdate: new Date().getTime(),
@@ -35,7 +35,7 @@ export const useChatStore = defineStore(
       sessions.value.unshift(
         cloneDeep({
           ...newChat,
-          topic: `新聊天${sessions.value.length + 1}`,
+          topic: '',
           id
         })
       )
@@ -89,6 +89,19 @@ export const useChatStore = defineStore(
       return session.value?.messages.find(({ id }) => mId === id)!
     }
 
+    // const genTitleAction = (
+    //   content: string,
+    //   onMessage: (message: string) => void
+    // ) => {
+    //   const reqData: MessageModel = {
+    //     card: configStore.card,
+    //     messages: [{ role: 'user', content }],
+    //     model: configStore.chatModel,
+    //     is_stream: true
+    //   }
+    //   requestChatTitle(reqData, onMessage)
+    // }
+
     /** 发送消息 */
     const sendMessageAction = (content: string) => {
       const reqData: MessageModel = {
@@ -118,6 +131,11 @@ export const useChatStore = defineStore(
             fetching.value = false
             getMessageById(botMessage.id).streaming = false
             getMessageById(botMessage.id).date = new Date().valueOf()
+            if (!session.value?.topic) {
+              session.value!.topic = userMessage.content
+                .trim()
+                .replace(/\r/g, '')
+            }
           }
         },
         onError(error: Error, statusCode?: number) {
@@ -141,7 +159,7 @@ export const useChatStore = defineStore(
     }
     /** 初始化判断是否有聊天, 没有创建一个空的 */
     onMounted(() => {
-      // sessions.value = []
+      sessions.value = []
       if (sessions.value?.length < 1) {
         newChatAction()
       }

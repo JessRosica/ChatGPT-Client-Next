@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Message } from '@arco-design/web-vue'
+import type { RouterLink } from 'vue-router'
 
 import userAvatar from '@/assets/userAvatars/user_avatar_36.webp'
 import { useLayoutStore } from '@/store/layout'
@@ -11,6 +12,7 @@ const route = useRoute()
 const router = useRouter()
 const { isMobileScreen } = useWindowSize()
 const current = computed(() => route.name)
+const popupVisible = ref(false)
 
 const layoutStore = useLayoutStore()
 const handleMenuItemClick = (name: string) => {
@@ -19,6 +21,10 @@ const handleMenuItemClick = (name: string) => {
   } catch (_) {
     Message.error('路由未实现~')
   }
+}
+const handleToRouter = (path: string) => {
+  popupVisible.value = false
+  router.push(path)
 }
 </script>
 
@@ -62,24 +68,65 @@ const handleMenuItemClick = (name: string) => {
           <template #icon><icon-apps /></template>
           工具
         </a-menu-item>
-        <!-- <a-menu-item key="Settings">
-          <template #icon><icon-settings /></template>
-          设置
-        </a-menu-item> -->
+        <a-menu-item key="Tutorial">
+          <template #icon><icon-question-circle /></template>
+          使用说明
+        </a-menu-item>
         <a-menu-item key="About">
           <template #icon><icon-info-circle /></template>
           关于我们
         </a-menu-item>
       </a-menu>
       <i class="flex-1"></i>
-      <SettingDrawer>
+      <a-popover
+        trigger="click"
+        v-model:popup-visible="popupVisible"
+        content-class="mr-2"
+      >
         <a-avatar
           :image-url="userAvatar"
           :size="32"
           :style="{ backgroundColor: '#14C9C9' }"
         >
         </a-avatar>
-      </SettingDrawer>
+        <template #content>
+          <a-card class="w-48" :bordered="false">
+            <a-descriptions size="mini" :column="1">
+              <a-descriptions-item label="账号">
+                <span
+                  class="text-warning text-danger flex items-center gap-x-4"
+                >
+                  <span>游客</span>
+                  <a-button size="mini" type="text" shape="circle">
+                    <icon-refresh />
+                  </a-button>
+                </span>
+              </a-descriptions-item>
+              <a-descriptions-item label="状态">
+                <a-badge size="small" status="processing" text="正常" />
+              </a-descriptions-item>
+              <a-descriptions-item label="积分">
+                18000/20000
+              </a-descriptions-item>
+            </a-descriptions>
+          </a-card>
+          <div class="grid grid-cols-2 gap-3">
+            <a-button @click="handleToRouter('chat')">聊天</a-button>
+            <a-button @click="handleToRouter('/tools')">工具</a-button>
+            <a-button @click="handleToRouter('/tutorial')">使用说明</a-button>
+            <a-button @click="handleToRouter('/about')">关于我们</a-button>
+            <SettingDrawer>
+              <a-button>系统设置</a-button>
+            </SettingDrawer>
+            <a-button
+              target="_blank"
+              href="https://www.houfaka.com/links/193B8193"
+            >
+              购买会员
+            </a-button>
+          </div>
+        </template>
+      </a-popover>
     </a-layout-header>
     <a-divider class="m-0" />
     <a-layout class="flex-1 overflow-hidden relative">

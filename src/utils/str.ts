@@ -11,4 +11,5 @@
    console.log(isAllWhitespace('')); // true
    ```
  */
-export const isAllWhitespace = (str: string) => /^\s*$/.test(str)
+// export const isAllWhitespace = (str: string) => /^\s*$/.test(str)
+export const isAllWhitespace = (str: string) => /^[\s\n\r]*$/.test(str)

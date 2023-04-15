@@ -1,48 +1,35 @@
-import axios from 'axios'
-
 import { useConfigStore } from '@/store/config'
 import type { MessageModel } from '@/types/chat'
 
 const TIME_OUT_MS = 30000
 
-export function axiosChunk(
-  data: MessageModel,
-  options: {
-    onMessage: (text: string, done: boolean) => void
-    onError: (error: any) => void
-  }
+export async function requestChatTitle(
+  sendMessage: MessageModel,
+  onMessage: (message: string) => void
 ) {
-  const CancelToken = axios.CancelToken
-  const source = CancelToken.source()
-  const { onMessage, onError } = options
-
-  axios
-    .post('/api/v1/chat/completions', data, {
-      cancelToken: source.token,
-      headers: {
-        'Content-Type': 'application/json',
-        'Transfer-Encoding': 'chunked'
-      },
-      responseType: 'stream'
-    })
-    .then(response => {
-      response.data.on('data', (chunk: any) => {
-        onMessage && onMessage(chunk.toString(), false)
-      })
-
-      response.data.on('end', () => {
-        onMessage && onMessage('', true)
-      })
-    })
-    .catch(error => {
-      if (axios.isCancel(error)) {
-        onMessage && onMessage('', true)
-      } else {
-        onError && onError(error)
+  const controller = new AbortController()
+  const reqTimeoutId = setTimeout(() => controller.abort(), TIME_OUT_MS)
+  try {
+    const configStore = useConfigStore()
+    const res = await fetch(
+      `${configStore.bootstrap.api}/v1/chat/completions`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          path: `${configStore.bootstrap.api}/v1/chat/completions`
+        },
+        body: JSON.stringify(sendMessage)
       }
-    })
-
-  return source.cancel
+    )
+    clearTimeout(reqTimeoutId)
+    if (res.ok) {
+      const text = await res.text()
+      onMessage(text)
+    }
+  } catch (err) {
+    console.error('NetWork Error', err)
+  }
 }
 
 export async function requestChatStream(
@@ -54,16 +41,8 @@ export async function requestChatStream(
     onController?: (controller: AbortController) => void
   }
 ) {
-  // const req = makeRequestParam(sendMessage, {
-  //   stream: true,
-  //   filterBot: options?.filterBot
-  // })
-
-  console.log('[Request] ', sendMessage)
-
   const controller = new AbortController()
   const reqTimeoutId = setTimeout(() => controller.abort(), TIME_OUT_MS)
-
   try {
     const configStore = useConfigStore()
     const res = await fetch(

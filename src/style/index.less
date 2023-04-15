@@ -59,3 +59,19 @@ mark {
     }
   }
 }
+
+.fade-enter-from,
+.fade-leave-to {
+  /*定义进入开始和离开结束的透明度为0*/
+  opacity: 0;
+}
+
+.fade-enter-to,
+.fade-leave-from {
+  /*定义进入结束和离开开始的透明度为1*/
+  opacity: 1;
+}
+.fade-leave-active,
+.fade-enter-active {
+  transition: all 0.2s linear;
+}

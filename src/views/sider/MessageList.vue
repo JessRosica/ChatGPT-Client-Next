@@ -74,7 +74,7 @@ const handleCommand = (command: ICommand, id?: string) => {
             v-for="chat in chatStore.sessions"
             :key="chat.id"
           >
-            {{ chat.topic }}
+            {{ chat.topic || '新的聊天' }}
             <a-button-group size="mini" class="actions">
               <a-button
                 @click.stop="handleCommand('del', chat.id)"

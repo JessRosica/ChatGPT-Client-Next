@@ -16,7 +16,10 @@ const avatar: Record<string, string> = {
   assistant: assistant
 }
 const scrollbarRef = ref<ScrollbarInstance>()
-const currentTitle = ref(chatStore.session?.topic)
+const currentTitle = ref('新的聊天')
+watchEffect(() => {
+  currentTitle.value = chatStore.session?.topic || '新的聊天'
+})
 const message = ref('')
 
 // function copyText(text: string): Promise<void> {
