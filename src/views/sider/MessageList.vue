@@ -98,7 +98,7 @@ const handleCommand = (command: ICommand, id?: string) => {
       </a-scrollbar>
 
       <div class="flex items-center justify-between p-4 bg-white dark:bg-dark">
-        <a-link type="primary">
+        <a-link type="primary" @click="chatStore.clearSessions">
           <template #icon><icon-robot-add /></template>
           清除会话
         </a-link>

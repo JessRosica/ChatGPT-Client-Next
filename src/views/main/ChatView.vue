@@ -1,25 +1,41 @@
 <script setup lang="ts">
-import type { ScrollbarInstance } from '@arco-design/web-vue'
+import { Message, type ScrollbarInstance } from '@arco-design/web-vue'
 
 import assistant from '@/assets/openai-white.svg'
 import userAvatar from '@/assets/userAvatars/user_avatar_36.webp'
-import MessageContent from '@/components/MessageContent.vue'
-import { ALL_MODELS } from '@/config'
-const currentTitle = ref('Vue使用localStorage')
+import { useChatStore } from '@/store/chat'
+import { useConfigStore } from '@/store/config'
+import { SubmitKey } from '@/types/keys'
 
+const chatStore = useChatStore()
+const configStore = useConfigStore()
+const session = computed(() => chatStore.session)
 const { isMobileScreen } = useWindowSize()
 const avatar: Record<string, string> = {
   user: userAvatar,
   assistant: assistant
 }
-
 const scrollbarRef = ref<ScrollbarInstance>()
+const currentTitle = ref(chatStore.session?.topic)
+const message = ref('')
+
 // function copyText(text: string): Promise<void> {
 //   if (!navigator.clipboard) {
 //     return Promise.reject()
 //   }
 //   return navigator.clipboard.writeText(text)
 // }
+
+const handleSendMessage = () => {
+  if (isAllWhitespace(message.value)) {
+    Message.clear()
+    Message.error('请输入消息内容')
+    return
+  }
+  chatStore.sendMessageAction(message.value)
+  message.value = ''
+}
+
 onMounted(() => {
   nextTick(() => {
     scrollbarRef.value?.scrollTop(
@@ -27,23 +43,51 @@ onMounted(() => {
     )
   })
 })
-const messages = [
-  {
-    id: 1680976980950,
-    date: '2023/4/9 02:03:00',
-    role: 'user',
-    content: 'vue  使用 localStore\n\n\n'
-  },
-  {
-    id: 1680976980950,
-    date: '2023/4/9 02:03:00',
-    role: 'assistant',
-    content:
-      "Vue可以使用LocalStorage来存储数据。LocalStorage是浏览器提供的一种本地存储方式，通过它可以在客户端保存键值对数据。\n\n以下是一个例子：\n\n```javascript\n// 存储数据\nlocalStorage.setItem('key', 'value');\n\n// 读取数据\nvar value = localStorage.getItem('key');\nconsole.log(value);\n```\n\n在实际的Vue应用中，我们可以在Vuex中使用LocalStorage来存储全局数据。例如：\n\n```javascript\nimport Vuex from 'vuex';\n\nlet store = new Vuex.Store({\n  state: {\n    count: 0\n  },\n  mutations: {\n    increment(state) {\n      state.count++;\n      localStorage.setItem('count', state.count.toString());\n    },\n    initCount(state) {\n      let count = localStorage.getItem('count');\n      if (count != null) {\n        state.count = parseInt(count);\n      }\n    }\n  }\n});\n\nstore.commit('initCount');\n```\n\n在上面的例子中，我们在increment方法里面更新了count的值，并将其存储到了LocalStorage中。在initCount方法里面，我们通过getItem方法从LocalStorage中读取count的值，并更新到state中。\n\n当我们在其他组件中需要访问count数据的时候，只需要通过this.$store.state.count来获取即可。",
-    streaming: false
+const handleSubmitChange = (value: any) => {
+  configStore.changeSubmitKeyAction(value as SubmitKey)
+}
+
+// const handleEnter = (e: MouseEvent) => {
+//   const isShift = e.shiftKey
+//   const isSubmitKey = isShift
+//     ? configStore.submitKey === SubmitKey.ShiftEnter
+//     : configStore.submitKey === SubmitKey.Enter
+
+//   if (isSubmitKey) {
+//     handleSendMessage()
+//     return
+//   }
+//   message.value += '\n'
+// }
+
+const handleEnter = (event: KeyboardEvent) => {
+  // 如果设置为 "enter 发送消息"
+  if (configStore.submitKey === SubmitKey.Enter) {
+    // 如果按下了 Shift + Enter，则输入回车符
+    if (event.shiftKey && event.code === 'Enter') {
+      event.preventDefault()
+      message.value += '\n'
+    }
+    // 如果按下了 Enter，则发送消息
+    else if (!event.shiftKey && event.code === 'Enter') {
+      event.preventDefault()
+      handleSendMessage()
+    }
   }
-]
-const model = ref('gpt-3.5-turbo')
+  // 如果设置为 "Shift + Enter 发送消息"
+  if (configStore.submitKey === SubmitKey.ShiftEnter) {
+    // 如果按下了 Enter，则输入回车符
+    if (!event.shiftKey && event.code === 'Enter') {
+      event.preventDefault()
+      message.value += '\n'
+    }
+    // 如果按下了 Shift + Enter，则发送消息
+    else if (event.shiftKey && event.code === 'Enter') {
+      event.preventDefault()
+      handleSendMessage()
+    }
+  }
+}
 </script>
 
 <template>
@@ -62,16 +106,8 @@ const model = ref('gpt-3.5-turbo')
     </div>
     <i class="flex-1" v-if="!isMobileScreen"></i>
     <a-input-group v-if="!isMobileScreen">
-      <a-select class="w-44" v-model="model" placeholder="Please select ...">
-        <a-option
-          v-for="item in ALL_MODELS"
-          :key="item.name"
-          :value="item.name"
-        >
-          {{ item.name }}
-        </a-option>
-      </a-select>
-      <a-input class="w-60" placeholder="Api key..." />
+      <ChangeChatModel class="w-44" />
+      <SetupCard class="w-60" />
     </a-input-group>
   </a-layout-header>
   <a-divider class="m-0" />
@@ -83,20 +119,24 @@ const model = ref('gpt-3.5-turbo')
         class="overflow-y-auto h-full p-4 grid grid-cols-1 gap-y-2"
       >
         <section
-          v-for="item in messages"
+          v-for="item in session?.messages ?? []"
           :key="item.id"
           class="message-item"
           :class="item.role === 'assistant' ? 'is-reply' : 'is-request'"
         >
-          <a-avatar
-            :size="32"
-            :class="item.role === 'assistant' ? 'bg-primary p-2' : 'bg-success'"
-          >
-            <img :src="avatar[item.role] ?? ''" />
-          </a-avatar>
+          <a-spin :loading="item.streaming && item.role === 'assistant'">
+            <a-avatar
+              :size="32"
+              :class="
+                item.role === 'assistant' ? 'bg-primary p-2' : 'bg-success'
+              "
+            >
+              <img :src="avatar[item.role] ?? ''" />
+            </a-avatar>
+          </a-spin>
           <section
             :class="[
-              'flex flex-1 overflow-hidden px-4 py-3 text-sm rounded-lg ',
+              'flex flex-1 overflow-hidden px-4 py-3 text-sm rounded-lg max-w-max',
               {
                 'justify-end bg-primary text-white': item.role === 'user'
               },
@@ -104,6 +144,7 @@ const model = ref('gpt-3.5-turbo')
             ]"
           >
             <MessageContent
+              :key="item.content"
               :text="item.content"
               :inversion="item.role !== 'assistant'"
             ></MessageContent>
@@ -111,26 +152,50 @@ const model = ref('gpt-3.5-turbo')
         </section>
       </a-scrollbar>
       <a-divider class="m-0" />
-      <a-spin loading dot>
-        <footer class="chat-footer">
-          <a-textarea
-            class="bg-white dark:bg-dark-900 border-none"
-            :auto-size="{ minRows: 3, maxRows: 5 }"
-            placeholder="请输入您的信息..."
-          />
-          <a-button type="primary">
-            <template #icon><icon-send /></template>
-            发送
-          </a-button>
-        </footer>
-      </a-spin>
+      <footer class="chat-footer">
+        <a-textarea
+          :disabled="chatStore.fetching"
+          v-model="message"
+          @keydown.enter.prevent="handleEnter"
+          class="bg-white dark:bg-dark-900 border-none"
+          :auto-size="{ minRows: 3, maxRows: 5 }"
+          placeholder="请输入您的信息..."
+        />
+        <a-dropdown-button
+          :disabled="chatStore.fetching"
+          @click="handleSendMessage"
+          @select="handleSubmitChange"
+          type="primary"
+        >
+          <icon-send class="mr-2" />
+          发送
+          <template #icon>
+            <icon-down />
+          </template>
+          <template #content>
+            <a-doption
+              v-for="item in Object.values(SubmitKey)"
+              :key="item"
+              :value="item"
+            >
+              <div class="flex items-center gap-x-2 w-32">
+                <span class="flex-1"> {{ item }}</span>
+                <icon-check
+                  v-if="item === configStore.submitKey"
+                  class="text-primary"
+                />
+              </div>
+            </a-doption>
+          </template>
+        </a-dropdown-button>
+      </footer>
     </main>
   </a-layout-content>
 </template>
 
 <style lang="less">
 .chat-wrapper {
-  @apply flex flex-col overflow-hidden;
+  @apply flex-1 flex flex-col overflow-hidden;
   .message-item {
     @apply flex items-start justify-items-start gap-x-2 pl-0;
     &.is-reply {

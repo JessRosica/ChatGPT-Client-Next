@@ -5,10 +5,11 @@
 export {}
 declare global {
   const ALL_MODELS: typeof import('../src/config/index')['ALL_MODELS']
-  const ENABLE_GPT4: typeof import('../src/config/index')['ENABLE_GPT4']
   const EffectScope: typeof import('vue')['EffectScope']
+  const axiosChunk: typeof import('../src/utils/request')['axiosChunk']
   const computed: typeof import('vue')['computed']
   const createApp: typeof import('vue')['createApp']
+  const createMessage: typeof import('../src/utils/index')['createMessage']
   const customRef: typeof import('vue')['customRef']
   const defineAsyncComponent: typeof import('vue')['defineAsyncComponent']
   const defineComponent: typeof import('vue')['defineComponent']
@@ -18,6 +19,7 @@ declare global {
   const getCurrentScope: typeof import('vue')['getCurrentScope']
   const h: typeof import('vue')['h']
   const inject: typeof import('vue')['inject']
+  const isAllWhitespace: typeof import('../src/utils/str')['isAllWhitespace']
   const isProxy: typeof import('vue')['isProxy']
   const isReactive: typeof import('vue')['isReactive']
   const isReadonly: typeof import('vue')['isReadonly']
@@ -44,6 +46,7 @@ declare global {
   const reactive: typeof import('vue')['reactive']
   const readonly: typeof import('vue')['readonly']
   const ref: typeof import('vue')['ref']
+  const requestChatStream: typeof import('../src/utils/request')['requestChatStream']
   const resolveComponent: typeof import('vue')['resolveComponent']
   const shallowReactive: typeof import('vue')['shallowReactive']
   const shallowReadonly: typeof import('vue')['shallowReadonly']
@@ -86,12 +89,15 @@ declare module 'vue' {
     readonly ALL_MODELS: UnwrapRef<
       typeof import('../src/config/index')['ALL_MODELS']
     >
-    readonly ENABLE_GPT4: UnwrapRef<
-      typeof import('../src/config/index')['ENABLE_GPT4']
-    >
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
+    readonly axiosChunk: UnwrapRef<
+      typeof import('../src/utils/request')['axiosChunk']
+    >
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
+    readonly createMessage: UnwrapRef<
+      typeof import('../src/utils/index')['createMessage']
+    >
     readonly customRef: UnwrapRef<typeof import('vue')['customRef']>
     readonly defineAsyncComponent: UnwrapRef<
       typeof import('vue')['defineAsyncComponent']
@@ -107,6 +113,9 @@ declare module 'vue' {
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
     readonly inject: UnwrapRef<typeof import('vue')['inject']>
+    readonly isAllWhitespace: UnwrapRef<
+      typeof import('../src/utils/str')['isAllWhitespace']
+    >
     readonly isProxy: UnwrapRef<typeof import('vue')['isProxy']>
     readonly isReactive: UnwrapRef<typeof import('vue')['isReactive']>
     readonly isReadonly: UnwrapRef<typeof import('vue')['isReadonly']>
@@ -143,6 +152,9 @@ declare module 'vue' {
     readonly reactive: UnwrapRef<typeof import('vue')['reactive']>
     readonly readonly: UnwrapRef<typeof import('vue')['readonly']>
     readonly ref: UnwrapRef<typeof import('vue')['ref']>
+    readonly requestChatStream: UnwrapRef<
+      typeof import('../src/utils/request')['requestChatStream']
+    >
     readonly resolveComponent: UnwrapRef<
       typeof import('vue')['resolveComponent']
     >

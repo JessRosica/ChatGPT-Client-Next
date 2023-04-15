@@ -15,7 +15,9 @@ declare module '@vue/runtime-core' {
     AButton: typeof import('@arco-design/web-vue')['Button']
     AButtonGroup: typeof import('@arco-design/web-vue')['ButtonGroup']
     ADivider: typeof import('@arco-design/web-vue')['Divider']
+    ADoption: typeof import('@arco-design/web-vue')['Doption']
     ADrawer: typeof import('@arco-design/web-vue')['Drawer']
+    ADropdownButton: typeof import('@arco-design/web-vue')['DropdownButton']
     AForm: typeof import('@arco-design/web-vue')['Form']
     AFormItem: typeof import('@arco-design/web-vue')['FormItem']
     AInput: typeof import('@arco-design/web-vue')['Input']
@@ -39,7 +41,13 @@ declare module '@vue/runtime-core' {
     ASpin: typeof import('@arco-design/web-vue')['Spin']
     ATextarea: typeof import('@arco-design/web-vue')['Textarea']
     ATypographyParagraph: typeof import('@arco-design/web-vue')['TypographyParagraph']
+    ChangeChatModel: typeof import('./../src/components/ChangeChatModel.vue')['default']
+    ContactModel: typeof import('./../src/components/ContactModel.vue')['default']
+    copy: typeof import('./../src/components/ChangeChatModel copy.vue')['default']
+    MessageContent: typeof import('./../src/components/MessageContent.vue')['default']
+    ReceivingWidget: typeof import('./../src/components/ReceivingWidget.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SetupCard: typeof import('./../src/components/SetupCard.vue')['default']
   }
 }

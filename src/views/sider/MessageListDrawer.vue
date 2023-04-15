@@ -10,7 +10,7 @@ import MessageList from './MessageList.vue'
     :header="false"
     :footer="false"
     class="message-drawer"
-    :drawer-style="{ maxWidth: '500px' }"
+    :drawer-style="{ maxWidth: '350px' }"
   >
     <MessageList is-drawer />
   </a-drawer>

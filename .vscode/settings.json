@@ -35,6 +35,7 @@
     "editor.defaultFormatter": "redhat.vscode-xml"
   },
   "cSpell.words": [
+    "openai",
     "Persistedstate",
     "pinia",
     "postinstallmac",

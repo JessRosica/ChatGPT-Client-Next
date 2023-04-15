@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { ALL_MODELS } from '@/config'
+import { useConfigStore } from '@/store/config'
 import { useLayoutStore } from '@/store/layout'
+import { SubmitKey } from '@/types/keys'
 import type { ThemeMode } from '@/types/theme'
 
 import { version } from '../../../package.json'
+
+const configStore = useConfigStore()
 const themeTitleMap: Record<ThemeMode, string> = {
   light: '浅色模式',
   dark: '深色模式',
@@ -14,24 +17,6 @@ const { isMobileScreen } = useWindowSize()
 const handleChangeTheme = (v: string | number | boolean) => {
   layoutStore.changeModeAction(v as unknown as ThemeMode)
 }
-
-enum SubmitKey {
-  Enter = 'Enter',
-  ShiftEnter = 'Shift + Enter'
-}
-const configState = reactive({
-  theme: 'auto',
-  apiKey: '',
-  submitKey: SubmitKey.Enter,
-  historyMessageCount: 4,
-  compressMessageLengthThreshold: 1000,
-  modelConfig: {
-    model: 'gpt-3.5-turbo',
-    temperature: 0.1,
-    max_tokens: 2000,
-    presence_penalty: 0
-  }
-})
 </script>
 
 <template>
@@ -45,7 +30,7 @@ const configState = reactive({
         ref="formRef"
         :label-col-props="{ span: 12 }"
         label-align="left"
-        :model="configState"
+        :model="{}"
         class="w-full mt-0 flex flex-col gap-y-3"
       >
         <div class="setting-card dark:bg-dark">
@@ -57,6 +42,50 @@ const configState = reactive({
             label="Version"
           >
             v{{ version }}
+          </a-form-item>
+        </div>
+
+        <div class="setting-card dark:bg-dark">
+          <a-form-item class="mb-0" field="card" label="会员卡">
+            <SetupCard />
+          </a-form-item>
+        </div>
+
+        <div class="setting-card dark:bg-dark">
+          <a-form-item
+            class="mb-0"
+            field="modelConfig.model"
+            label="模型(Model)"
+          >
+            <ChangeChatModel class="w-full" />
+          </a-form-item>
+          <a-form-item
+            class="mb-0"
+            field="modelConfig.temperature"
+            :label="
+              isMobileScreen
+                ? '随机性 (temperature)'
+                : `随机性 (temperature): ${configStore.temperature}`
+            "
+          >
+            <a-input-number
+              v-if="isMobileScreen"
+              :max="2"
+              :step="0.1"
+              :min="0.1"
+              :precision="0.1"
+              :model-value="configStore.temperature"
+              @change="configStore.changeTemperatureAction"
+              mode="button"
+            />
+            <a-slider
+              v-else
+              :model-value="configStore.temperature"
+              @change="configStore.changeTemperatureAction"
+              :step="0.1"
+              :min="0.1"
+              :max="2"
+            />
           </a-form-item>
         </div>
         <div class="setting-card dark:bg-dark">
@@ -77,15 +106,25 @@ const configState = reactive({
             </div>
           </a-form-item>
           <a-form-item class="mb-0" field="submitKey" label="发送键">
-            <a-select v-if="isMobileScreen" v-model="configState.submitKey">
+            <a-select
+              v-if="isMobileScreen"
+              :model-value="configStore.submitKey"
+              @change="(v: any) => configStore.changeSubmitKeyAction(v)"
+            >
               <a-option
                 v-for="item in Object.values(SubmitKey)"
                 :key="item"
                 :value="item"
-                >{{ item }}</a-option
               >
+                {{ item }}
+              </a-option>
             </a-select>
-            <a-radio-group v-else type="button" v-model="configState.submitKey">
+            <a-radio-group
+              v-else
+              type="button"
+              :model-value="configStore.submitKey"
+              @change="(v: any) => configStore.changeSubmitKeyAction(v)"
+            >
               <a-radio
                 v-for="item in Object.values(SubmitKey)"
                 :key="item"
@@ -94,61 +133,6 @@ const configState = reactive({
                 {{ item }}
               </a-radio>
             </a-radio-group>
-          </a-form-item>
-        </div>
-        <div class="setting-card dark:bg-dark">
-          <a-form-item class="mb-0" field="apiKey" label="Api Key">
-            <a-input
-              v-model="configState.apiKey"
-              placeholder="OpenAI API Key"
-            />
-          </a-form-item>
-        </div>
-
-        <div class="setting-card dark:bg-dark">
-          <a-form-item
-            field="compressMessageLengthThreshold"
-            label="历史消息长度压缩阈值"
-          >
-            <a-input-number
-              :mode="isMobileScreen ? 'button' : 'embed'"
-              v-model="configState.compressMessageLengthThreshold"
-              :min="500"
-              :max="4000"
-              :precision="1"
-            />
-          </a-form-item>
-
-          <a-form-item
-            class="mb-0"
-            field="modelConfig.model"
-            label="模型(Model)"
-          >
-            <a-select
-              v-model="configState.modelConfig.model"
-              placeholder="Please select ..."
-              allow-clear
-            >
-              <a-option
-                v-for="item in ALL_MODELS"
-                :key="item.name"
-                :value="item.name"
-              >
-                {{ item.name }}
-              </a-option>
-            </a-select>
-          </a-form-item>
-          <a-form-item
-            class="mb-0"
-            field="modelConfig.temperature"
-            label="随机性 (temperature)"
-          >
-            <a-slider
-              v-model="configState.modelConfig.temperature"
-              :step="0.1"
-              :min="0"
-              :max="2"
-            />
           </a-form-item>
         </div>
       </a-form>
