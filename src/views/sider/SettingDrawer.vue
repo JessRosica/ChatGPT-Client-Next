@@ -14,7 +14,7 @@ const visible = ref(false)
     cancel-text="关闭"
     :drawer-style="{ maxWidth: '500px' }"
   >
-    <SettingsView @click.prevent />
+    <SettingsView />
   </a-drawer>
 </template>
 

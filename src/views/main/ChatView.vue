@@ -107,7 +107,6 @@ const handleEnter = (event: KeyboardEvent) => {
     // 如果按下了 Shift + Enter，则输入回车符
     if (event.shiftKey && event.code === 'Enter') {
       event.preventDefault()
-      message.value += '\n'
     }
     // 如果按下了 Enter，则发送消息
     else if (!event.shiftKey && event.code === 'Enter') {
@@ -120,7 +119,6 @@ const handleEnter = (event: KeyboardEvent) => {
     // 如果按下了 Enter，则输入回车符
     if (!event.shiftKey && event.code === 'Enter') {
       event.preventDefault()
-      message.value += '\n'
     }
     // 如果按下了 Shift + Enter，则发送消息
     else if (event.shiftKey && event.code === 'Enter') {
