@@ -129,7 +129,8 @@ export const useChatStore = defineStore(
     const sendMessageAction = (
       content: string,
       onMessage?: () => void,
-      onController?: (controller: AbortController) => void
+      onController?: (controller: AbortController) => void,
+      appendUserMessage: boolean = true
     ) => {
       const reqData: MessageModel = {
         card: configStore.card,
@@ -141,8 +142,9 @@ export const useChatStore = defineStore(
         role: 'user',
         content
       })
-
-      session.value!.messages.push(userMessage)
+      if (appendUserMessage) {
+        session.value!.messages.push(userMessage)
+      }
       const botMessage: MessageItem = createMessage({
         role: 'assistant',
         streaming: true,
@@ -187,6 +189,16 @@ export const useChatStore = defineStore(
       })
     }
 
+    const messageRetryAction = (
+      index: number,
+      onMessage: () => void,
+      onController: (controller: AbortController) => void
+    ) => {
+      session.value?.messages.splice(index, 1)
+      const message = session.value?.messages[index - 1]
+      sendMessageAction(message?.content || '', onMessage, onController, false)
+    }
+
     /** 初始化判断是否有聊天, 没有创建一个空的 */
     onMounted(() => {
       // sessions.value = []
@@ -203,6 +215,7 @@ export const useChatStore = defineStore(
       clearSessions,
       removeChatAction,
       sendMessageAction,
+      messageRetryAction,
       changeCurrentChatAction,
       handleChangeSessionTopicAction
     }

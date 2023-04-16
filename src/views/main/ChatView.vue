@@ -13,6 +13,8 @@ const configStore = useConfigStore()
 const session = computed(() => chatStore.session)
 const { isMobileScreen } = useWindowSize()
 
+/** 鼠标滚动之后不自动滚动 */
+const userWheel = ref(false)
 const avatar: Record<string, string> = {
   user: userAvatar,
   assistant: assistant
@@ -25,12 +27,23 @@ watchEffect(() => {
 })
 const message = ref('')
 
-// function copyText(text: string): Promise<void> {
-//   if (!navigator.clipboard) {
-//     return Promise.reject()
-//   }
-//   return navigator.clipboard.writeText(text)
-// }
+const handleRetry = (index: number) => {
+  userWheel.value = false
+  chatStore.messageRetryAction(
+    index,
+    () => {
+      if (!userWheel.value) {
+        scrollbarRef.value?.scrollTop(
+          (scrollbarRef.value?.containerRef?.scrollHeight ?? 0) - 200
+        )
+      }
+    },
+    ctl => {
+      abortController.value = ctl
+    }
+  )
+}
+
 const abortController = ref<AbortController>()
 const handleSendMessage = () => {
   if (isAllWhitespace(message.value)) {
@@ -38,12 +51,16 @@ const handleSendMessage = () => {
     Message.error('请输入消息内容')
     return
   }
+
+  userWheel.value = false
   chatStore.sendMessageAction(
     message.value,
     () => {
-      scrollbarRef.value?.scrollTop(
-        (scrollbarRef.value?.containerRef?.scrollHeight ?? 0) - 200
-      )
+      if (!userWheel.value) {
+        scrollbarRef.value?.scrollTop(
+          (scrollbarRef.value?.containerRef?.scrollHeight ?? 0) - 200
+        )
+      }
     },
     ctl => {
       abortController.value = ctl
@@ -52,17 +69,29 @@ const handleSendMessage = () => {
   message.value = ''
 }
 
+const handleListenerUserWheel = (event: any) => {
+  if (event.deltaY > 0) {
+    userWheel.value = true
+  }
+}
+
 onMounted(() => {
   nextTick(() => {
     scrollbarRef.value?.scrollTop(
       (scrollbarRef.value?.containerRef?.scrollHeight ?? 0) - 200
     )
+    scrollbarRef.value?.$el.addEventListener('wheel', handleListenerUserWheel)
   })
 })
+
+onUnmounted(() => {
+  scrollbarRef.value?.$el.removeEventListener('wheel', handleListenerUserWheel)
+})
+
 /** 修改提交键 */
-const handleSubmitChange = (value: any) => {
-  configStore.changeSubmitKeyAction(value as SubmitKey)
-}
+// const handleSubmitChange = (value: any) => {
+//   configStore.changeSubmitKeyAction(value as SubmitKey)
+// }
 
 /**
  * 修改当前标题
@@ -103,7 +132,17 @@ const handleEnter = (event: KeyboardEvent) => {
 
 const handleCopyMessage = (value: string) => {
   copyText({ text: value })
+  Message.clear()
+  Message.success('复制成功')
 }
+
+const placeholder = computed(() => {
+  return `请输入您的消息，${configStore.submitKey} 发送，${
+    configStore.submitKey === SubmitKey.Enter
+      ? SubmitKey.ShiftEnter
+      : SubmitKey.Enter
+  } 换行`
+})
 </script>
 
 <template>
@@ -132,11 +171,11 @@ const handleCopyMessage = (value: string) => {
     <main class="chat-wrapper">
       <a-scrollbar
         ref="scrollbarRef"
-        outer-style="flex: 1; overflow: hidden;"
-        class="overflow-y-auto h-full p-4 flex flex-col gap-y-2"
+        outer-style="flex: 1; overflow: hidden; "
+        class="overflow-y-auto h-full p-4 flex flex-col gap-y-2 pb-20"
       >
         <section
-          v-for="item in session?.messages ?? []"
+          v-for="(item, index) in session?.messages ?? []"
           :key="item.id"
           class="message-item"
           :class="[item.role === 'assistant' ? 'is-reply' : 'is-request']"
@@ -177,17 +216,17 @@ const handleCopyMessage = (value: string) => {
                   <icon-copy class="text-base" />
                 </a-button>
               </a-tooltip>
-              <!-- <a-tooltip content-class="text-xs" content="复制" position="top">
-                <a-button size="mini" shape="circle" type="text">
-                  <icon-copy class="text-base" />
-                </a-button>
-              </a-tooltip>
+
               <a-tooltip content-class="text-xs" content="重试" position="top">
-                <a-button size="mini" shape="circle" type="text">
+                <a-button
+                  @click="handleRetry(index)"
+                  size="mini"
+                  shape="circle"
+                  type="text"
+                >
                   <icon-sync class="text-base" />
                 </a-button>
               </a-tooltip>
-              <a-divider direction="vertical" :margin="0" /> -->
             </div>
             <MessageContent
               :key="item.content"
@@ -199,52 +238,52 @@ const handleCopyMessage = (value: string) => {
       </a-scrollbar>
       <a-divider class="m-0" />
       <footer class="chat-footer">
-        <a-spin :loading="chatStore.fetching" class="footer-spin">
+        <!-- <a-spin :loading="chatStore.fetching" class="footer-spin">
+          <template #icon> </template>
+        </a-spin> -->
+        <a-button
+          @click="abortController?.abort()"
+          shape="round"
+          status="danger"
+          v-if="chatStore.fetching"
+          class="stop-receiving"
+        >
+          <icon-record-stop class="text-lg" />
+          停止
+        </a-button>
+        <a-textarea
+          v-model="message"
+          @keydown.enter="handleEnter"
+          class="bg-white dark:bg-dark-900 border-none"
+          :auto-size="{ minRows: 4, maxRows: 6 }"
+          :placeholder="placeholder"
+        />
+        <!-- <a-dropdown-button
+          @click="handleSendMessage"
+          @select="handleSubmitChange"
+          type="primary"
+        >
+          <icon-send class="mr-2" />
+          发送
           <template #icon>
-            <a-tooltip content-class="text-xs" content="停止" position="top">
-              <a-button
-                @click="abortController?.abort()"
-                shape="circle"
-                status="danger"
-              >
-                <icon-record-stop class="text-lg" />
-              </a-button>
-            </a-tooltip>
+            <icon-down />
           </template>
-          <a-textarea
-            v-model="message"
-            @keydown.enter.prevent="handleEnter"
-            class="bg-white dark:bg-dark-900 border-none"
-            :auto-size="{ minRows: 3, maxRows: 5 }"
-            placeholder="请输入您的消息..."
-          />
-          <a-dropdown-button
-            @click="handleSendMessage"
-            @select="handleSubmitChange"
-            type="primary"
-          >
-            <icon-send class="mr-2" />
-            发送
-            <template #icon>
-              <icon-down />
-            </template>
-            <template #content>
-              <a-doption
-                v-for="item in Object.values(SubmitKey)"
-                :key="item"
-                :value="item"
-              >
-                <div class="flex items-center gap-x-2 w-32">
-                  <span class="flex-1"> {{ item }}</span>
-                  <icon-check
-                    v-if="item === configStore.submitKey"
-                    class="text-primary"
-                  />
-                </div>
-              </a-doption>
-            </template>
-          </a-dropdown-button>
-        </a-spin>
+          <template #content>
+            <a-doption
+              v-for="item in Object.values(SubmitKey)"
+              :key="item"
+              :value="item"
+            >
+              <div class="flex items-center gap-x-2 w-32">
+                <span class="flex-1"> {{ item }}</span>
+                <icon-check
+                  v-if="item === configStore.submitKey"
+                  class="text-primary"
+                />
+              </div>
+            </a-doption>
+          </template>
+        </a-dropdown-button> -->
       </footer>
     </main>
   </a-layout-content>
@@ -282,13 +321,10 @@ const handleCopyMessage = (value: string) => {
   }
 }
 .chat-footer {
-  @apply w-full flex items-end bg-white dark:bg-dark-900 pl-2 pr-4 justify-end pt-3 pb-2;
-}
+  @apply relative w-full flex flex-col items-center bg-white dark:bg-dark-900 pl-2 pr-4 justify-end pt-3 pb-2;
 
-.footer-spin {
-  @apply w-full flex flex-col items-center justify-center;
-  .arco-spin-mask {
-    background-color: rgba(255, 255, 255, 0.92);
+  .stop-receiving {
+    @apply absolute -top-12;
   }
 }
 </style>

@@ -41,13 +41,13 @@ const handleChangeTheme = (v: string | number | boolean) => {
             field="theme"
             label="Version"
           >
-            v{{ version }}
+            <span class="text-primary">v{{ version }}</span>
           </a-form-item>
         </div>
 
         <div class="setting-card dark:bg-dark">
           <a-form-item class="mb-0" field="card" label="积分卡">
-            <SetupCard />
+            <SetupCard class="w-full" />
           </a-form-item>
         </div>
 

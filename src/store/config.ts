@@ -64,13 +64,7 @@ export const useConfigStore = defineStore(
             if (card.value) {
               Message.error(res.msg)
             }
-            card.value = ''
-            cardInfo.value = {
-              enable: false,
-              expire_time: '',
-              points: 0,
-              remain_points: 0
-            }
+            cardInfo.value = undefined
           } else {
             cardInfo.value = res.data
           }

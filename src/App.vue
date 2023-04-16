@@ -102,9 +102,11 @@ const handleToRouter = (path: string) => {
               <a-descriptions-item label="账号">
                 <span
                   class="flex items-center gap-x-4"
-                  :class="[configStore.card ? 'text-primary' : 'text-danger']"
+                  :class="[
+                    configStore.cardInfo ? 'text-primary' : 'text-danger'
+                  ]"
                 >
-                  <span>{{ configStore.card ? '会员' : '游客' }}</span>
+                  <span>{{ configStore.cardInfo ? '会员' : '游客' }}</span>
                   <a-button
                     size="mini"
                     type="text"
@@ -121,17 +123,26 @@ const handleToRouter = (path: string) => {
                   :status="
                     configStore.cardInfo?.enable ? 'processing' : 'danger'
                   "
-                  :text="configStore.cardInfo?.enable ? '正常' : '禁用'"
+                  :text="
+                    configStore.cardInfo
+                      ? configStore.cardInfo?.enable
+                        ? '正常'
+                        : '禁用'
+                      : '正常'
+                  "
                 />
               </a-descriptions-item>
               <a-descriptions-item label="积分">
-                <span class="text-primary">
-                  {{ configStore.cardInfo?.remain_points || 0 }}
-                </span>
-                /
-                <span class="text-info">
-                  {{ configStore.cardInfo?.points || 0 }}
-                </span>
+                <template v-if="configStore.cardInfo">
+                  <span class="text-primary">
+                    {{ configStore.cardInfo?.remain_points || 0 }}
+                  </span>
+                  /
+                  <span class="text-info">
+                    {{ configStore.cardInfo?.points || 0 }}
+                  </span>
+                </template>
+                <span v-else class="text-primary">每日五次免费调用</span>
               </a-descriptions-item>
             </a-descriptions>
           </a-card>
@@ -140,9 +151,7 @@ const handleToRouter = (path: string) => {
             <a-button @click="handleToRouter('/tools')">工具</a-button>
             <a-button @click="handleToRouter('/tutorial')">使用说明</a-button>
             <a-button @click="handleToRouter('/about')">关于我们</a-button>
-            <SettingDrawer>
-              <a-button>系统设置</a-button>
-            </SettingDrawer>
+            <SettingDrawer />
             <a-button
               target="_blank"
               href="https://www.houfaka.com/links/193B8193"
