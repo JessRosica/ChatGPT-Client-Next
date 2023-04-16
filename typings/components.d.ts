@@ -45,6 +45,7 @@ declare module '@vue/runtime-core' {
     ASlider: typeof import('@arco-design/web-vue')['Slider']
     ASpin: typeof import('@arco-design/web-vue')['Spin']
     ATextarea: typeof import('@arco-design/web-vue')['Textarea']
+    ATooltip: typeof import('@arco-design/web-vue')['Tooltip']
     ATypographyParagraph: typeof import('@arco-design/web-vue')['TypographyParagraph']
     ChangeChatModel: typeof import('./../src/components/ChangeChatModel.vue')['default']
     ChangeSessionTopic: typeof import('./../src/components/ChangeSessionTopic.vue')['default']

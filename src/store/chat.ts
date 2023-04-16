@@ -126,7 +126,11 @@ export const useChatStore = defineStore(
     }
 
     /** 发送消息 */
-    const sendMessageAction = (content: string, onMessage?: () => void) => {
+    const sendMessageAction = (
+      content: string,
+      onMessage?: () => void,
+      onController?: (controller: AbortController) => void
+    ) => {
       const reqData: MessageModel = {
         card: configStore.card,
         messages: getRequiredMessages({ role: 'user', content }),
@@ -147,6 +151,7 @@ export const useChatStore = defineStore(
       session.value!.messages.push(botMessage)
 
       requestChatStream(reqData, {
+        onController,
         onMessage(message: string, done: boolean) {
           fetching.value = true
           getMessageById(botMessage.id).content = message
@@ -170,8 +175,8 @@ export const useChatStore = defineStore(
           } else {
             getMessageById(botMessage.id).content +=
               statusCode !== undefined
-                ? '\n\n' + error?.message ?? '出错了，稍后重试吧'
-                : '网络异常, 请稍后重试!'
+                ? '\n\n' + `\`${error?.message || '出错了，稍后重试吧'}\``
+                : '\n\n' + '`网络异常, 请稍后重试!`'
           }
           getMessageById(botMessage.id).streaming = false
           // userMessage.isError = true

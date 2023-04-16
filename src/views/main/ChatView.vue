@@ -28,18 +28,24 @@ const message = ref('')
 //   }
 //   return navigator.clipboard.writeText(text)
 // }
-
+const abortController = ref<AbortController>()
 const handleSendMessage = () => {
   if (isAllWhitespace(message.value)) {
     Message.clear()
     Message.error('请输入消息内容')
     return
   }
-  chatStore.sendMessageAction(message.value, () => {
-    scrollbarRef.value?.scrollTop(
-      (scrollbarRef.value?.containerRef?.scrollHeight ?? 0) - 200
-    )
-  })
+  chatStore.sendMessageAction(
+    message.value,
+    () => {
+      scrollbarRef.value?.scrollTop(
+        (scrollbarRef.value?.containerRef?.scrollHeight ?? 0) - 200
+      )
+    },
+    ctl => {
+      abortController.value = ctl
+    }
+  )
   message.value = ''
 }
 
@@ -126,21 +132,60 @@ const handleEnter = (event: KeyboardEvent) => {
           v-for="item in session?.messages ?? []"
           :key="item.id"
           class="message-item"
-          :class="item.role === 'assistant' ? 'is-reply' : 'is-request'"
+          :class="[item.role === 'assistant' ? 'is-reply' : 'is-request']"
         >
-          <a-spin :loading="item.streaming && item.role === 'assistant'">
-            <a-avatar
-              :size="32"
-              :class="
-                item.role === 'assistant' ? 'bg-primary p-2' : 'bg-success'
-              "
+          <div class="flex items-center gap-x-2">
+            <a-spin :loading="item.streaming && item.role === 'assistant'">
+              <a-avatar
+                :size="32"
+                :class="
+                  item.role === 'assistant' ? 'bg-primary p-2' : 'bg-success'
+                "
+              >
+                <img :src="avatar[item.role] ?? ''" />
+              </a-avatar>
+            </a-spin>
+            <div
+              v-if="item.role === 'assistant'"
+              class="flex items-center gap-x-1 pl-4"
             >
-              <img :src="avatar[item.role] ?? ''" />
-            </a-avatar>
-          </a-spin>
+              <!-- <a-tooltip content-class="text-xs" content="复制" position="top">
+                <a-button size="mini" shape="circle" type="text">
+                  <icon-copy class="text-base" />
+                </a-button>
+              </a-tooltip>
+              <a-tooltip content-class="text-xs" content="重试" position="top">
+                <a-button size="mini" shape="circle" type="text">
+                  <icon-sync class="text-base" />
+                </a-button>
+              </a-tooltip>
+              <a-divider direction="vertical" :margin="0" /> -->
+              <a-tooltip
+                v-if="item.streaming"
+                content-class="text-xs"
+                content="停止"
+                position="top"
+              >
+                <a-button
+                  @click="abortController?.abort()"
+                  size="mini"
+                  shape="circle"
+                  type="text"
+                  status="danger"
+                >
+                  <icon-record-stop class="text-base" />
+                </a-button>
+              </a-tooltip>
+            </div>
+          </div>
+          <small
+            v-if="item.streaming && item.role === 'assistant'"
+            class="text-info"
+            >正在输入...</small
+          >
           <section
             :class="[
-              'flex flex-1 overflow-hidden px-4 py-3 text-sm rounded-lg max-w-max',
+              'flex flex-col overflow-hidden px-4 py-3 text-sm rounded-lg max-w-max',
               {
                 'justify-end bg-primary text-white': item.role === 'user'
               },
@@ -148,6 +193,7 @@ const handleEnter = (event: KeyboardEvent) => {
             ]"
           >
             <MessageContent
+              :loading="item.streaming"
               :key="item.content"
               :text="item.content"
               :inversion="item.role !== 'assistant'"
@@ -201,9 +247,10 @@ const handleEnter = (event: KeyboardEvent) => {
 .chat-wrapper {
   @apply flex-1 flex flex-col overflow-hidden;
   .message-item {
-    @apply flex items-start justify-items-start gap-x-2 pl-0;
+    @apply flex flex-col items-start justify-items-start gap-2 pl-0;
+    max-width: 75%;
     &.is-reply {
-      @apply pr-10;
+      // @apply pr-10;
     }
     &.is-request {
       @apply flex-row-reverse  pl-10 max-w-max ml-auto;
