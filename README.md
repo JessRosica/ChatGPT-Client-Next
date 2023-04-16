@@ -1,27 +1,27 @@
 # ChatGPT-Client-Next
 
-ChatGPT-Client-Next 是一个基于 GPT-3/4 的聊天机器人客户端，使用 Vue 和 Arco Design 进行开发，旨在提供一个简单易用的聊天机器人客户端，帮助用户更好地使用 GPT-3/4 进行聊天。
+`ChatGPT-Client-Next` 是一个基于 `GPT-3/4` 的聊天机器人客户端，使用 `Vue`, `Arco Design`, `TypeScript` 进行开发，旨在提供一个简单易用的聊天机器人客户端，帮助用户更好地使用 `GPT-3/4` 进行聊天。
 
 ## Online Demo
 
 [https://zhuzhaofeng.site/ChatGPT-Client-Next/](https://zhuzhaofeng.site/ChatGPT-Client-Next/)
 
-## 功能
+## 示例
 
-- 与 GPT 进行聊天
-- 选择模型
-- 保存聊天记录
-- 填写自定义 key
-- 修改主题
+![Example 1](examples/example_1.png)
+
+![Example 2](examples/example_2.png)
+
+![Example 3](examples/example_3.png)
 
 ## 安装
 
-在使用 ChatGPT-Client-Next 之前，需要先安装以下软件：
+在使用 `ChatGPT-Client-Next` 之前，需要先安装以下软件：
 
-- Node.js
-- npm
+- `Node.js`
+- `npm`
 
-安装完成之后，可以使用以下命令在本地运行 ChatGPT-Client-Next：
+安装完成之后，可以使用以下命令在本地运行 `ChatGPT-Client-Next`：
 
 ```bash
 # 克隆项目 https
@@ -43,10 +43,10 @@ npm start
 
 ## 使用
 
-在运行 ChatGPT-Client-Next 之后，可以在浏览器中访问 `http://localhost:3000/`，进入聊天机器人客户端。
+在运行 `ChatGPT-Client-Next` 之后，可以在浏览器中访问 `http://localhost:3000/`，进入聊天机器人客户端。
 
 聊天记录会自动保存在本地，可以在聊天记录页面查看。
 
 ## 贡献
 
-如果您在使用 ChatGPT-Client-Next 的过程中发现了问题，或者有任何建议或想法，欢迎在 GitHub 上提交 issue 或者 pull request。
+如果您在使用 `ChatGPT-Client-Next` 的过程中发现了问题，或者有任何建议或想法，欢迎在 `GitHub` 上提交`issue` 或者`pull request`。
