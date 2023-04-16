@@ -141,18 +141,16 @@ const handleCopyMessage = (value: string) => {
           class="message-item"
           :class="[item.role === 'assistant' ? 'is-reply' : 'is-request']"
         >
-          <div class="flex items-center gap-x-2 w-full">
-            <a-spin :loading="item.streaming && item.role === 'assistant'">
-              <a-avatar
-                :size="32"
-                :class="
-                  item.role === 'assistant' ? 'bg-primary p-2' : 'bg-success'
-                "
-              >
-                <img :src="avatar[item.role] ?? ''" />
-              </a-avatar>
-            </a-spin>
-          </div>
+          <a-spin :loading="item.streaming && item.role === 'assistant'">
+            <a-avatar
+              :size="32"
+              :class="
+                item.role === 'assistant' ? 'bg-primary p-2' : 'bg-success'
+              "
+            >
+              <img :src="avatar[item.role] ?? ''" />
+            </a-avatar>
+          </a-spin>
           <small
             v-if="item.streaming && item.role === 'assistant'"
             class="text-info"
@@ -163,9 +161,9 @@ const handleCopyMessage = (value: string) => {
             :class="[
               'message-item__content',
               {
-                'justify-end bg-primary text-white': item.role === 'user'
+                'is-user': item.role === 'user'
               },
-              { 'bg-white dark:bg-dark': item.role === 'assistant' }
+              { 'is-assistant': item.role === 'assistant' }
             ]"
           >
             <div v-if="item.role === 'assistant'" class="message-item__actions">
@@ -266,6 +264,13 @@ const handleCopyMessage = (value: string) => {
     }
     .message-item__content {
       @apply relative flex flex-col px-4 py-3 text-sm rounded-lg max-w-max;
+      &.is-user {
+        @apply justify-end bg-primary text-white;
+      }
+
+      &.is-assistant {
+        @apply bg-white dark:bg-dark;
+      }
     }
 
     .message-item__actions {
