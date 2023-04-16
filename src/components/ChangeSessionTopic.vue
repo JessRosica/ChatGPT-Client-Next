@@ -22,6 +22,7 @@ const handleBeforeOpen = () => {
     v-model:visible="visible"
     title="修改会话标题"
     hide-cancel
+    :modal-style="{ 'max-width': '80%' }"
     @ok="handleBeforeOk"
   >
     <a-input

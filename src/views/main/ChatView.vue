@@ -70,22 +70,30 @@ const handleSendMessage = () => {
 }
 
 const handleListenerUserWheel = (event: any) => {
-  if (event.deltaY > 0) {
+  if (event.deltaY < 10) {
     userWheel.value = true
   }
+  // 获取滚动距离
+  // console.log('滚动距离：', event.deltaY)
 }
 
 onMounted(() => {
   nextTick(() => {
+    console.log(scrollbarRef.value?.$el)
+    document
     scrollbarRef.value?.scrollTop(
       (scrollbarRef.value?.containerRef?.scrollHeight ?? 0) - 200
     )
-    scrollbarRef.value?.$el.addEventListener('wheel', handleListenerUserWheel)
+    scrollbarRef.value?.$el
+      .querySelector('.arco-scrollbar-container')
+      .addEventListener('wheel', handleListenerUserWheel)
   })
 })
 
 onUnmounted(() => {
-  scrollbarRef.value?.$el.removeEventListener('wheel', handleListenerUserWheel)
+  scrollbarRef.value?.$el
+    .querySelector('.arco-scrollbar-container')
+    .removeEventListener('wheel', handleListenerUserWheel)
 })
 
 /** 修改提交键 */
@@ -246,7 +254,7 @@ const placeholder = computed(() => {
           v-if="chatStore.fetching"
           class="stop-receiving"
         >
-          <icon-record-stop class="text-lg" />
+          <icon-record-stop class="text-lg mr-2" />
           停止
         </a-button>
         <a-textarea
