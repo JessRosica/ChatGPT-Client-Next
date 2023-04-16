@@ -7,14 +7,17 @@ import { useChatStore } from '@/store/chat'
 import { useConfigStore } from '@/store/config'
 import { SubmitKey } from '@/types/keys'
 
+useCopyCode()
 const chatStore = useChatStore()
 const configStore = useConfigStore()
 const session = computed(() => chatStore.session)
 const { isMobileScreen } = useWindowSize()
+
 const avatar: Record<string, string> = {
   user: userAvatar,
   assistant: assistant
 }
+
 const scrollbarRef = ref<ScrollbarInstance>()
 const currentTitle = ref('新的聊天')
 watchEffect(() => {
@@ -97,6 +100,10 @@ const handleEnter = (event: KeyboardEvent) => {
     }
   }
 }
+
+const handleCopyMessage = (value: string) => {
+  copyText({ text: value })
+}
 </script>
 
 <template>
@@ -134,7 +141,7 @@ const handleEnter = (event: KeyboardEvent) => {
           class="message-item"
           :class="[item.role === 'assistant' ? 'is-reply' : 'is-request']"
         >
-          <div class="flex items-center gap-x-2">
+          <div class="flex items-center gap-x-2 w-full">
             <a-spin :loading="item.streaming && item.role === 'assistant'">
               <a-avatar
                 :size="32"
@@ -145,10 +152,33 @@ const handleEnter = (event: KeyboardEvent) => {
                 <img :src="avatar[item.role] ?? ''" />
               </a-avatar>
             </a-spin>
-            <div
-              v-if="item.role === 'assistant'"
-              class="flex items-center gap-x-1 pl-4"
-            >
+          </div>
+          <small
+            v-if="item.streaming && item.role === 'assistant'"
+            class="text-info"
+          >
+            正在输入...
+          </small>
+          <section
+            :class="[
+              'message-item__content',
+              {
+                'justify-end bg-primary text-white': item.role === 'user'
+              },
+              { 'bg-white dark:bg-dark': item.role === 'assistant' }
+            ]"
+          >
+            <div v-if="item.role === 'assistant'" class="message-item__actions">
+              <a-tooltip content-class="text-xs" content="复制" position="top">
+                <a-button
+                  @click="handleCopyMessage(item.content)"
+                  size="mini"
+                  shape="circle"
+                  type="text"
+                >
+                  <icon-copy class="text-base" />
+                </a-button>
+              </a-tooltip>
               <!-- <a-tooltip content-class="text-xs" content="复制" position="top">
                 <a-button size="mini" shape="circle" type="text">
                   <icon-copy class="text-base" />
@@ -160,40 +190,8 @@ const handleEnter = (event: KeyboardEvent) => {
                 </a-button>
               </a-tooltip>
               <a-divider direction="vertical" :margin="0" /> -->
-              <a-tooltip
-                v-if="item.streaming"
-                content-class="text-xs"
-                content="停止"
-                position="top"
-              >
-                <a-button
-                  @click="abortController?.abort()"
-                  size="mini"
-                  shape="circle"
-                  type="text"
-                  status="danger"
-                >
-                  <icon-record-stop class="text-base" />
-                </a-button>
-              </a-tooltip>
             </div>
-          </div>
-          <small
-            v-if="item.streaming && item.role === 'assistant'"
-            class="text-info"
-            >正在输入...</small
-          >
-          <section
-            :class="[
-              'flex flex-col overflow-hidden px-4 py-3 text-sm rounded-lg max-w-max',
-              {
-                'justify-end bg-primary text-white': item.role === 'user'
-              },
-              { 'bg-white dark:bg-dark': item.role === 'assistant' }
-            ]"
-          >
             <MessageContent
-              :loading="item.streaming"
               :key="item.content"
               :text="item.content"
               :inversion="item.role !== 'assistant'"
@@ -203,41 +201,52 @@ const handleEnter = (event: KeyboardEvent) => {
       </a-scrollbar>
       <a-divider class="m-0" />
       <footer class="chat-footer">
-        <a-textarea
-          :disabled="chatStore.fetching"
-          v-model="message"
-          @keydown.enter.prevent="handleEnter"
-          class="bg-white dark:bg-dark-900 border-none"
-          :auto-size="{ minRows: 3, maxRows: 5 }"
-          placeholder="请输入您的消息..."
-        />
-        <a-dropdown-button
-          :disabled="chatStore.fetching"
-          @click="handleSendMessage"
-          @select="handleSubmitChange"
-          type="primary"
-        >
-          <icon-send class="mr-2" />
-          发送
+        <a-spin :loading="chatStore.fetching" class="footer-spin">
           <template #icon>
-            <icon-down />
+            <a-tooltip content-class="text-xs" content="停止" position="top">
+              <a-button
+                @click="abortController?.abort()"
+                shape="circle"
+                status="danger"
+              >
+                <icon-record-stop class="text-lg" />
+              </a-button>
+            </a-tooltip>
           </template>
-          <template #content>
-            <a-doption
-              v-for="item in Object.values(SubmitKey)"
-              :key="item"
-              :value="item"
-            >
-              <div class="flex items-center gap-x-2 w-32">
-                <span class="flex-1"> {{ item }}</span>
-                <icon-check
-                  v-if="item === configStore.submitKey"
-                  class="text-primary"
-                />
-              </div>
-            </a-doption>
-          </template>
-        </a-dropdown-button>
+          <a-textarea
+            v-model="message"
+            @keydown.enter.prevent="handleEnter"
+            class="bg-white dark:bg-dark-900 border-none"
+            :auto-size="{ minRows: 3, maxRows: 5 }"
+            placeholder="请输入您的消息..."
+          />
+          <a-dropdown-button
+            @click="handleSendMessage"
+            @select="handleSubmitChange"
+            type="primary"
+          >
+            <icon-send class="mr-2" />
+            发送
+            <template #icon>
+              <icon-down />
+            </template>
+            <template #content>
+              <a-doption
+                v-for="item in Object.values(SubmitKey)"
+                :key="item"
+                :value="item"
+              >
+                <div class="flex items-center gap-x-2 w-32">
+                  <span class="flex-1"> {{ item }}</span>
+                  <icon-check
+                    v-if="item === configStore.submitKey"
+                    class="text-primary"
+                  />
+                </div>
+              </a-doption>
+            </template>
+          </a-dropdown-button>
+        </a-spin>
       </footer>
     </main>
   </a-layout-content>
@@ -253,11 +262,28 @@ const handleEnter = (event: KeyboardEvent) => {
       // @apply pr-10;
     }
     &.is-request {
-      @apply flex-row-reverse  pl-10 max-w-max ml-auto;
+      @apply items-end pl-10 max-w-max ml-auto;
+    }
+    .message-item__content {
+      @apply relative flex flex-col px-4 py-3 text-sm rounded-lg max-w-max;
+    }
+
+    .message-item__actions {
+      @apply flex items-center gap-x-1 pl-4 absolute -top-9 right-8 opacity-0  transition-all duration-500;
+    }
+    &:hover .message-item__actions {
+      @apply right-0 opacity-100;
     }
   }
 }
 .chat-footer {
   @apply w-full flex items-end bg-white dark:bg-dark-900 pl-2 pr-4 justify-end pt-3 pb-2;
+}
+
+.footer-spin {
+  @apply w-full flex flex-col items-center justify-center;
+  .arco-spin-mask {
+    background-color: rgba(255, 255, 255, 0.92);
+  }
 }
 </style>

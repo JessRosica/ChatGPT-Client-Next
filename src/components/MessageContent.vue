@@ -64,20 +64,27 @@ function highlightBlock(str: string, lang?: string) {
   return `<pre class="code-block-wrapper"><div class="code-block-header"><span class="code-block-header__lang">${lang}</span><span class="code-block-header__copy">复制代码</span></div><code class="hljs code-block-body ${lang}">${str}</code></pre>`
 }
 onUpdated(() => {
-  if (textRef.value) {
-    hljs.highlightBlock(textRef.value)
-  }
+  nextTick(() => {
+    if (textRef.value) {
+      hljs.highlightBlock(textRef.value)
+    }
+  })
 })
 </script>
 <template>
   <div :class="wrapClass">
-    <div ref="textRef" class="leading-relaxed break-words relative">
-      <div v-if="!inversion">
-        <div v-if="!asRawText" class="markdown-body" v-html="text" />
+    <template v-if="loading">
+      <span class="dark:text-white w-[4px] h-[20px] block animate-blink" />
+    </template>
+    <template v-else>
+      <div ref="textRef" class="leading-relaxed break-words">
+        <div v-if="!inversion">
+          <div v-if="!asRawText" class="markdown-body" v-html="text" />
+          <div v-else class="whitespace-pre-wrap" v-text="text" />
+        </div>
         <div v-else class="whitespace-pre-wrap" v-text="text" />
       </div>
-      <div v-else class="whitespace-pre-wrap" v-text="text" />
-    </div>
+    </template>
   </div>
 </template>
 

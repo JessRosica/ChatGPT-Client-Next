@@ -10,6 +10,7 @@ declare global {
   const EffectScope: typeof import('vue')['EffectScope']
   const QUERY_CARD: typeof import('../src/config/index')['QUERY_CARD']
   const computed: typeof import('vue')['computed']
+  const copyText: typeof import('../src/utils/copy')['copyText']
   const createApp: typeof import('vue')['createApp']
   const createMessage: typeof import('../src/utils/index')['createMessage']
   const customRef: typeof import('vue')['customRef']
@@ -61,6 +62,7 @@ declare global {
   const triggerRef: typeof import('vue')['triggerRef']
   const unref: typeof import('vue')['unref']
   const useAttrs: typeof import('vue')['useAttrs']
+  const useCopyCode: typeof import('../src/hooks/useCopyCode')['useCopyCode']
   const useCssModule: typeof import('vue')['useCssModule']
   const useCssVars: typeof import('vue')['useCssVars']
   const useLink: typeof import('vue-router')['useLink']
@@ -88,6 +90,7 @@ declare module 'vue' {
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly QUERY_CARD: UnwrapRef<typeof import('../src/config/index')['QUERY_CARD']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
+    readonly copyText: UnwrapRef<typeof import('../src/utils/copy')['copyText']>
     readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
     readonly createMessage: UnwrapRef<typeof import('../src/utils/index')['createMessage']>
     readonly customRef: UnwrapRef<typeof import('vue')['customRef']>
@@ -139,6 +142,7 @@ declare module 'vue' {
     readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
+    readonly useCopyCode: UnwrapRef<typeof import('../src/hooks/useCopyCode')['useCopyCode']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>

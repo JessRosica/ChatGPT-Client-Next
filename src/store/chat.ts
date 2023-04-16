@@ -150,10 +150,10 @@ export const useChatStore = defineStore(
       })
       session.value!.messages.push(botMessage)
 
+      fetching.value = true
       requestChatStream(reqData, {
         onController,
         onMessage(message: string, done: boolean) {
-          fetching.value = true
           getMessageById(botMessage.id).content = message
           onMessage && onMessage()
           if (done) {
