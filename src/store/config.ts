@@ -19,8 +19,6 @@ export const useConfigStore = defineStore(
         .then(res => res.json())
         .then(res => {
           bootstrap.value = res
-        })
-        .finally(() => {
           setupCardAction(card.value)
         })
     })
