@@ -1,15 +1,13 @@
 import { Modal } from '@arco-design/web-vue'
-import { decode, encode } from 'gpt-token-utils'
+import { encode } from 'gpt-token-utils'
 import { cloneDeep } from 'lodash-es'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-import { ALL_MODELS_MAX_TOKENS } from './../config/index'
-
-console.log({ encode, decode })
 import type { ChatItem, MessageItem, MessageModel } from '@/types/chat'
 import { createMessage } from '@/utils'
 
+import { ALL_MODELS_MAX_TOKENS } from './../config/index'
 import { useConfigStore } from './config'
 
 export const useChatStore = defineStore(
@@ -116,7 +114,6 @@ export const useChatStore = defineStore(
           const tokens = encode(item.content).length
           if (tokens < maxTokens && sum < maxTokens) {
             sum += tokens
-            console.log(sum)
             res.push(item as MessageItem)
           } else {
             throw new Error('')
@@ -129,7 +126,7 @@ export const useChatStore = defineStore(
     }
 
     /** 发送消息 */
-    const sendMessageAction = (content: string) => {
+    const sendMessageAction = (content: string, onMessage?: () => void) => {
       const reqData: MessageModel = {
         card: configStore.card,
         messages: getRequiredMessages({ role: 'user', content }),
@@ -153,6 +150,7 @@ export const useChatStore = defineStore(
         onMessage(message: string, done: boolean) {
           fetching.value = true
           getMessageById(botMessage.id).content = message
+          onMessage && onMessage()
           if (done) {
             fetching.value = false
             getMessageById(botMessage.id).streaming = false
@@ -165,7 +163,6 @@ export const useChatStore = defineStore(
           }
         },
         onError(error: Error, statusCode?: number) {
-          console.log(error.message, statusCode)
           fetching.value = false
           if (statusCode === 401) {
             getMessageById(botMessage.id).content =
@@ -180,6 +177,7 @@ export const useChatStore = defineStore(
           // userMessage.isError = true
           getMessageById(botMessage.id).isError = true
           getMessageById(botMessage.id).date = new Date().valueOf()
+          onMessage && onMessage()
         }
       })
     }

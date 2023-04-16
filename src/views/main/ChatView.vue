@@ -35,7 +35,11 @@ const handleSendMessage = () => {
     Message.error('请输入消息内容')
     return
   }
-  chatStore.sendMessageAction(message.value)
+  chatStore.sendMessageAction(message.value, () => {
+    scrollbarRef.value?.scrollTop(
+      (scrollbarRef.value?.containerRef?.scrollHeight ?? 0) - 200
+    )
+  })
   message.value = ''
 }
 
@@ -116,7 +120,7 @@ const handleEnter = (event: KeyboardEvent) => {
       <a-scrollbar
         ref="scrollbarRef"
         outer-style="flex: 1; overflow: hidden;"
-        class="overflow-y-auto h-full p-4 grid grid-cols-1 gap-y-2"
+        class="overflow-y-auto h-full p-4 flex flex-col gap-y-2"
       >
         <section
           v-for="item in session?.messages ?? []"

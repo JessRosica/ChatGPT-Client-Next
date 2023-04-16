@@ -45,18 +45,16 @@ export async function requestChatStream(
   const reqTimeoutId = setTimeout(() => controller.abort(), TIME_OUT_MS)
   try {
     const configStore = useConfigStore()
-    const res = await fetch(
-      `${configStore.bootstrap.api}/v1/chat/completions`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          path: `${configStore.bootstrap.api}/v1/chat/completions`
-        },
-        body: JSON.stringify(sendMessage),
-        signal: controller.signal
-      }
-    )
+    const path = `${configStore.bootstrap.api}${CHAT_COMPLETIONS}`
+    const res = await fetch(path, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        path
+      },
+      body: JSON.stringify(sendMessage),
+      signal: controller.signal
+    })
     clearTimeout(reqTimeoutId)
 
     let responseText = ''

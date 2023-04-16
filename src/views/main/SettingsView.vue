@@ -23,7 +23,7 @@ const handleChangeTheme = (v: string | number | boolean) => {
   <a-scrollbar
     outer-style="flex: 1; overflow: hidden;"
     :outer-class="['settings-wrapper', { 'is-mobile': isMobileScreen }]"
-    class="overflow-y-auto h-full p-4 grid grid-cols-1 gap-y-2"
+    class="overflow-y-auto h-full p-4 flex flex-col gap-y-2"
   >
     <div class="max-w-4xl w-full mx-auto">
       <a-form

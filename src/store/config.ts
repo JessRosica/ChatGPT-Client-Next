@@ -1,3 +1,4 @@
+import { Message } from '@arco-design/web-vue'
 import { defineStore } from 'pinia'
 
 import type { ChatModel } from '@/types/chat'
@@ -19,6 +20,9 @@ export const useConfigStore = defineStore(
         .then(res => {
           bootstrap.value = res
         })
+        .finally(() => {
+          setupCardAction(card.value)
+        })
     })
 
     // 侧边栏是否显示
@@ -31,7 +35,14 @@ export const useConfigStore = defineStore(
     const chatModel = ref<ChatModel>('gpt-3.5-turbo')
 
     // 积分卡
+    const setupCardLoading = ref(false)
     const card = ref<string>('')
+    const cardInfo = ref<{
+      enable: boolean
+      expire_time: string
+      points: number
+      remain_points: number
+    }>()
 
     // 发送按键
     const submitKey = ref<SubmitKey>(SubmitKey.ShiftEnter)
@@ -45,7 +56,30 @@ export const useConfigStore = defineStore(
 
     // 切换积分卡
     function setupCardAction(payload: string) {
+      setupCardLoading.value = true
       card.value = payload
+      const path = `${bootstrap.value.api}${QUERY_CARD}?card=${payload}`
+      fetch(path)
+        .then(res => res.json())
+        .then(res => {
+          if (res.code !== 200) {
+            if (card.value) {
+              Message.error(res.msg)
+            }
+            card.value = ''
+            cardInfo.value = {
+              enable: false,
+              expire_time: '',
+              points: 0,
+              remain_points: 0
+            }
+          } else {
+            cardInfo.value = res.data
+          }
+        })
+        .finally(() => {
+          setupCardLoading.value = false
+        })
     }
 
     // 切换主题模式
@@ -93,16 +127,18 @@ export const useConfigStore = defineStore(
     }
 
     return {
-      bootstrap,
       card,
+      cardInfo,
+      bootstrap,
       collapsed,
       themeMode,
       chatModel,
       submitKey,
       temperature,
-      toggleCollapsedAction,
-      changeModeAction,
+      setupCardLoading,
       setupCardAction,
+      changeModeAction,
+      toggleCollapsedAction,
       changeChatModelAction,
       changeSubmitKeyAction,
       changeTemperatureAction
@@ -112,7 +148,14 @@ export const useConfigStore = defineStore(
     persist: [
       {
         storage: localStorage,
-        paths: ['themeMode', 'chatModel', 'card', 'submitKey', 'temperature']
+        paths: [
+          'themeMode',
+          'chatModel',
+          'card',
+          'submitKey',
+          'temperature',
+          'cardInfo'
+        ]
       }
     ]
   }

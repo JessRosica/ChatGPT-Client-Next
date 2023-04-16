@@ -6,13 +6,16 @@ import userAvatar from '@/assets/userAvatars/user_avatar_36.webp'
 import { useLayoutStore } from '@/store/layout'
 
 import ContactModel from './components/ContactModel.vue'
+import { useConfigStore } from './store/config'
 import MessageListDrawer from './views/sider/MessageListDrawer.vue'
 import SettingDrawer from './views/sider/SettingDrawer.vue'
 const route = useRoute()
 const router = useRouter()
+const configStore = useConfigStore()
 const { isMobileScreen } = useWindowSize()
 const current = computed(() => route.name)
 const popupVisible = ref(false)
+const setupCardLoading = computed(() => configStore.setupCardLoading)
 
 const layoutStore = useLayoutStore()
 const handleMenuItemClick = (name: string) => {
@@ -90,23 +93,45 @@ const handleToRouter = (path: string) => {
         >
         </a-avatar>
         <template #content>
-          <a-card class="w-48" :bordered="false">
+          <a-card
+            class="w-48 h-[100px] overflow-hidden"
+            :loading="setupCardLoading"
+            :bordered="false"
+          >
             <a-descriptions size="mini" :column="1">
               <a-descriptions-item label="账号">
                 <span
-                  class="text-warning text-danger flex items-center gap-x-4"
+                  class="flex items-center gap-x-4"
+                  :class="[configStore.card ? 'text-primary' : 'text-danger']"
                 >
-                  <span>游客</span>
-                  <a-button size="mini" type="text" shape="circle">
+                  <span>{{ configStore.card ? '会员' : '游客' }}</span>
+                  <a-button
+                    size="mini"
+                    type="text"
+                    @click="configStore.setupCardAction(configStore.card)"
+                    shape="circle"
+                  >
                     <icon-refresh />
                   </a-button>
                 </span>
               </a-descriptions-item>
               <a-descriptions-item label="状态">
-                <a-badge size="small" status="processing" text="正常" />
+                <a-badge
+                  size="small"
+                  :status="
+                    configStore.cardInfo?.enable ? 'processing' : 'danger'
+                  "
+                  :text="configStore.cardInfo?.enable ? '正常' : '禁用'"
+                />
               </a-descriptions-item>
               <a-descriptions-item label="积分">
-                18000/20000
+                <span class="text-primary">
+                  {{ configStore.cardInfo?.remain_points || 0 }}
+                </span>
+                /
+                <span class="text-info">
+                  {{ configStore.cardInfo?.points || 0 }}
+                </span>
               </a-descriptions-item>
             </a-descriptions>
           </a-card>

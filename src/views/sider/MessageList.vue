@@ -61,7 +61,7 @@ const handleCommand = (command: ICommand, id?: string) => {
       <a-divider class="m-0" />
       <a-scrollbar
         outer-style="flex: 1; overflow: hidden;"
-        class="overflow-y-auto h-full px-0 grid grid-cols-1 gap-y-2"
+        class="overflow-y-auto h-full px-0 flex flex-col gap-y-2"
       >
         <a-menu
           :default-open-keys="['0']"
