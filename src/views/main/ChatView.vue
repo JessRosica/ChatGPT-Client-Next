@@ -116,7 +116,7 @@ const handleEnter = (event: KeyboardEvent) => {
       handleSendMessage()
     }
   } else {
-    if (event.key === 'Enter' && event.shiftKey) {
+    if (event.key === 'Enter') {
       event.preventDefault()
       handleSendMessage()
     }
