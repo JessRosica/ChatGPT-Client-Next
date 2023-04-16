@@ -13,6 +13,7 @@ const handleChangeMode = (value: string | number | Record<string, any>) => {
     :model-value="configStore.chatModel"
     @change="handleChangeMode"
     :allow-clear="false"
+    disabled
     placeholder="Please select model..."
   >
     <a-option v-for="item in ALL_MODELS" :key="item" :value="item">

@@ -94,7 +94,7 @@ const handleToRouter = (path: string) => {
         </a-avatar>
         <template #content>
           <a-card
-            class="w-48 h-[100px] overflow-hidden"
+            class="w-48 h-[100px] overflow-hidden rounded mb-2"
             :loading="setupCardLoading"
             :bordered="false"
           >

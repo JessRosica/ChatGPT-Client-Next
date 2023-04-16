@@ -15,6 +15,8 @@ export const useConfigStore = defineStore(
     })
 
     onMounted(() => {
+      chatModel.value = 'gpt-3.5-turbo'
+      submitKey.value = SubmitKey.Enter
       fetch('/bootstrap.json')
         .then(res => res.json())
         .then(res => {

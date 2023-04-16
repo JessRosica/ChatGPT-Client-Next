@@ -110,30 +110,45 @@ const handleEditEnd = () => {
 }
 
 const handleEnter = (event: KeyboardEvent) => {
-  // 如果设置为 "enter 发送消息"
-  if (configStore.submitKey === SubmitKey.Enter) {
-    // 如果按下了 Shift + Enter，则输入回车符
-    if (event.shiftKey && event.code === 'Enter') {
+  if (!isMobileScreen.value) {
+    if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault()
+      handleSendMessage()
     }
-    // 如果按下了 Enter，则发送消息
-    else if (!event.shiftKey && event.code === 'Enter') {
+  } else {
+    if (event.key === 'Enter' && event.shiftKey) {
       event.preventDefault()
       handleSendMessage()
     }
   }
+  // if (event.shiftKey && event.code === 'Enter') {
+  //   event.preventDefault()
+  //   message.value.s
+  // }
+  // // 如果设置为 "enter 发送消息"
+  // if (configStore.submitKey === SubmitKey.Enter) {
+  //   // 如果按下了 Shift + Enter，则输入回车符
+  //   if (event.shiftKey && event.code === 'Enter') {
+  //     event.preventDefault()
+  //   }
+  //   // 如果按下了 Enter，则发送消息
+  //   else if (!event.shiftKey && event.code === 'Enter') {
+  //     event.preventDefault()
+  //     handleSendMessage()
+  //   }
+  // }
   // 如果设置为 "Shift + Enter 发送消息"
-  if (configStore.submitKey === SubmitKey.ShiftEnter) {
-    // 如果按下了 Enter，则输入回车符
-    if (!event.shiftKey && event.code === 'Enter') {
-      event.preventDefault()
-    }
-    // 如果按下了 Shift + Enter，则发送消息
-    else if (event.shiftKey && event.code === 'Enter') {
-      event.preventDefault()
-      handleSendMessage()
-    }
-  }
+  // if (configStore.submitKey === SubmitKey.ShiftEnter) {
+  //   // 如果按下了 Enter，则输入回车符
+  //   if (!event.shiftKey && event.code === 'Enter') {
+  //     event.preventDefault()
+  //   }
+  //   // 如果按下了 Shift + Enter，则发送消息
+  //   else if (event.shiftKey && event.code === 'Enter') {
+  //     event.preventDefault()
+  //     handleSendMessage()
+  //   }
+  // }
 }
 
 const handleCopyMessage = (value: string) => {
@@ -259,7 +274,7 @@ const placeholder = computed(() => {
         </a-button>
         <a-textarea
           v-model="message"
-          @keydown.enter="handleEnter"
+          @keypress="handleEnter"
           class="bg-white dark:bg-dark-900 border-none"
           :auto-size="{ minRows: 4, maxRows: 6 }"
           :placeholder="placeholder"

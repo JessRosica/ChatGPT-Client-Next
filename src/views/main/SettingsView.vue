@@ -105,7 +105,12 @@ const handleChangeTheme = (v: string | number | boolean) => {
               </span>
             </div>
           </a-form-item>
-          <a-form-item class="mb-0" field="submitKey" label="发送键">
+          <a-form-item
+            v-if="false"
+            class="mb-0"
+            field="submitKey"
+            label="发送键"
+          >
             <a-select
               v-if="isMobileScreen"
               :model-value="configStore.submitKey"
